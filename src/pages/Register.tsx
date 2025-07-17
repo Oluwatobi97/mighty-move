@@ -7,6 +7,7 @@ import { register } from "../utils/api";
 import { setToken } from "../utils/auth";
 import { toast } from "react-toastify";
 import { AuthContext } from "../context/AuthContext";
+import Spinner from "../components/Spinner";
 
 const Container = styled(motion.div)`
   padding: 2.5rem 2rem 2rem 2rem;
@@ -35,6 +36,7 @@ const Title = styled.h2`
 const Register: React.FC = () => {
   const navigate = useNavigate();
   const auth = React.useContext(AuthContext);
+  const [loading, setLoading] = React.useState(false);
   const fields = [
     { name: "name", label: "Name", placeholder: "Enter your name" },
     {
@@ -52,6 +54,7 @@ const Register: React.FC = () => {
   ];
 
   const handleSubmit = async (values: Record<string, string>) => {
+    setLoading(true);
     try {
       const res: any = await register(
         values as { name: string; email: string; password: string }
@@ -59,30 +62,33 @@ const Register: React.FC = () => {
       setToken(res.token);
       if (auth?.setUser) auth.setUser(res.user);
       toast.success("Registration successful!");
-      setTimeout(() => navigate("/home"), 1200);
+      setTimeout(() => navigate("/home"), 800);
     } catch (err: any) {
       toast.error(
         err.response?.data?.error || err.message || "Registration failed"
       );
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <Container
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7 }}
+      transition={{ duration: 0.3 }}
     >
       <Card
-        initial={{ scale: 0.95, opacity: 0 }}
+        initial={{ scale: 0.98, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.7, delay: 0.2 }}
+        transition={{ duration: 0.3, delay: 0.1 }}
       >
         <Title>Register</Title>
         <AuthForm
           fields={fields}
           onSubmit={handleSubmit}
-          submitLabel="Register"
+          submitLabel={loading ? <Spinner /> : "Register"}
+          submitDisabled={loading}
           footer={
             <div style={{ marginTop: "1.2rem", fontSize: "1rem" }}>
               Already have an account? <Link to="/login">Login</Link>

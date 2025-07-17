@@ -67,12 +67,12 @@ const Marketing: React.FC = () => (
   <Wrapper
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
-    transition={{ duration: 0.7 }}
+    transition={{ duration: 0.3 }}
   >
     <Hero
       initial={{ scale: 0.95, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
-      transition={{ duration: 0.7, delay: 0.2 }}
+      transition={{ duration: 0.3, delay: 0.1 }}
     >
       <Title>Welcome to Multi-Service Platform</Title>
       <Subtitle>

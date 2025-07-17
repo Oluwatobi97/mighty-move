@@ -93,12 +93,12 @@ const Home: React.FC = () => (
   <Container
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
-    transition={{ duration: 0.7 }}
+    transition={{ duration: 0.3 }}
   >
     <Hero
       initial={{ scale: 0.95, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
-      transition={{ duration: 0.7, delay: 0.2 }}
+      transition={{ duration: 0.3, delay: 0.1 }}
     >
       <Title>Welcome to the MIGHTY MOVES</Title>
       <Subtitle>
@@ -115,7 +115,7 @@ const Home: React.FC = () => (
       <ArticleCard
         initial={{ y: 40, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.7, delay: 0.3 }}
+        transition={{ duration: 0.3, delay: 0.1 }}
       >
         <ArticleTitle>🛠️ Moving Services</ArticleTitle>
         <ArticleText>
@@ -128,7 +128,7 @@ const Home: React.FC = () => (
       <ArticleCard
         initial={{ y: 40, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.7, delay: 0.4 }}
+        transition={{ duration: 0.3, delay: 0.2 }}
       >
         <ArticleTitle>🗑️ Waste Collection</ArticleTitle>
         <ArticleText>
@@ -140,7 +140,7 @@ const Home: React.FC = () => (
       <ArticleCard
         initial={{ y: 40, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.7, delay: 0.5 }}
+        transition={{ duration: 0.3, delay: 0.3 }}
       >
         <ArticleTitle>📦 Logistics Services</ArticleTitle>
         <ArticleText>
