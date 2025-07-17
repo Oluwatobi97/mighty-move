@@ -155,18 +155,6 @@ const SidebarNavLink = styled(Link)`
   }
 `;
 
-const navLinks = [
-  { to: "/home", label: "Home", button: false },
-  { to: "/move", label: "Book a Move", button: false },
-  { to: "/waste", label: "Waste Pickup", button: false },
-  { to: "/logistics", label: "Send Package", button: false },
-  { to: "/track", label: "Track", button: false },
-  { to: "/dashboard", label: "Dashboard", button: false },
-  { to: "/admin", label: "Admin", button: false },
-  { to: "/about", label: "About", button: false },
-  { to: "/terms", label: "Terms", button: false },
-];
-
 const Header: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const auth = useContext(AuthContext);

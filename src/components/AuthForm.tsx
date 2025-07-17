@@ -11,7 +11,8 @@ export type AuthFormField = {
 export type AuthFormProps = {
   fields: AuthFormField[];
   onSubmit: (values: Record<string, string>) => void;
-  submitLabel?: string;
+  submitLabel?: React.ReactNode;
+  submitDisabled?: boolean;
   footer?: React.ReactNode;
   requireTerms?: boolean;
 };
@@ -20,6 +21,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
   fields,
   onSubmit,
   submitLabel = "Submit",
+  submitDisabled = false,
   footer,
   requireTerms,
 }) => {
@@ -94,7 +96,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
         </div>
       )}
       {error && <div style={{ color: "#d32f2f", fontSize: 15 }}>{error}</div>}
-      <button type="submit" style={{ marginTop: 8 }}>
+      <button type="submit" style={{ marginTop: 8 }} disabled={submitDisabled}>
         {submitLabel}
       </button>
       {success && (
