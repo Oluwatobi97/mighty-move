@@ -388,6 +388,41 @@ const CenteredMainCard = styled(ResponsiveCard)`
   }
 `;
 
+const MainCard = styled(motion.section)`
+  background: #fffde7;
+  border-radius: 24px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+  padding: 2.5rem 2rem;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  @media (max-width: 700px) {
+    padding: 1.2rem 0.5rem;
+    gap: 1.2rem;
+  }
+`;
+const PanelCard = styled.div`
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 8px 0 rgba(31, 38, 135, 0.08);
+  padding: 1.5rem 1.2rem;
+  max-width: 400px;
+  min-width: 260px;
+  width: 100%;
+  @media (max-width: 700px) {
+    padding: 1.2rem 0.5rem;
+    margin-bottom: 1.2rem;
+    min-width: 0;
+  }
+`;
+const SectionTitle = styled.h3`
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #111;
+`;
+
 const AdminDashboard: React.FC = () => {
   const [bookings, setBookings] = useState<any[]>([]);
   const [filteredBookings, setFilteredBookings] = useState<any[]>([]);
@@ -564,120 +599,114 @@ const AdminDashboard: React.FC = () => {
 
   return (
     <Container
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      style={{ minHeight: "100vh", boxSizing: "border-box" }}
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
     >
-      <Header
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5 }}
+      <MainCard
+        initial={{ scale: 0.98, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.3, delay: 0.1 }}
       >
-        <Title>Admin Dashboard</Title>
-        <Subtitle>
-          Manage all service requests, assign workers, and track performance
-        </Subtitle>
-      </Header>
-      <TopPanelsWrapper>
-        <CenteredPanel>
-          <NotificationsTitle>Notifications</NotificationsTitle>
-          <NotificationList>
-            {notifications.length === 0 ? (
-              <li>No notifications.</li>
-            ) : (
-              (showAllNotifications
-                ? notifications
-                : notifications.slice(0, 2)
-              ).map((n, i) => (
-                <NotificationItem
-                  key={i}
-                  unread={!readNotifications.has(i)}
-                  onClick={() => handleNotificationClick(n, i)}
-                  style={{ cursor: "pointer" }}
-                >
-                  <span>{n.message}</span>
-                  {!readNotifications.has(i) && (
-                    <MarkReadButton
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleMarkNotificationRead(i);
-                      }}
-                    >
-                      Mark as Read
-                    </MarkReadButton>
-                  )}
-                </NotificationItem>
-              ))
+        <h2 style={{ marginBottom: "1.2rem" }}>Admin Dashboard</h2>
+        <TopPanelsWrapper>
+          <PanelCard>
+            <SectionTitle>Notifications</SectionTitle>
+            <NotificationList>
+              {notifications.length === 0 ? (
+                <li>No notifications.</li>
+              ) : (
+                (showAllNotifications
+                  ? notifications
+                  : notifications.slice(0, 2)
+                ).map((n, i) => (
+                  <NotificationItem
+                    key={i}
+                    unread={!readNotifications.has(i)}
+                    onClick={() => handleNotificationClick(n, i)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <span>{n.message}</span>
+                    {!readNotifications.has(i) && (
+                      <MarkReadButton
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleMarkNotificationRead(i);
+                        }}
+                      >
+                        Mark as Read
+                      </MarkReadButton>
+                    )}
+                  </NotificationItem>
+                ))
+              )}
+            </NotificationList>
+            {notifications.length > 2 && (
+              <MarkReadButton
+                style={{ marginTop: 8, width: "100%" }}
+                onClick={() => setShowAllNotifications((prev) => !prev)}
+              >
+                {showAllNotifications ? "Show Less" : "Show All"}
+              </MarkReadButton>
             )}
-          </NotificationList>
-          {notifications.length > 2 && (
-            <MarkReadButton
-              style={{ marginTop: 8, width: "100%" }}
-              onClick={() => setShowAllNotifications((prev) => !prev)}
-            >
-              {showAllNotifications ? "Show Less" : "Show All"}
-            </MarkReadButton>
-          )}
-          {notificationModalOpen && activeNotification && (
-            <AdminModal
-              isOpen={notificationModalOpen}
-              onClose={() => setNotificationModalOpen(false)}
-              type="notes"
-              booking={activeNotification.booking}
-              onSubmit={() => setNotificationModalOpen(false)}
-            />
-          )}
-        </CenteredPanel>
-        <HistoryPanel>
-          <HistoryTitle>History</HistoryTitle>
-          <HistoryList>
-            {bookings.filter((b) => b.status !== "Pending").length === 0 ? (
-              <li>No history yet.</li>
-            ) : (
-              (showAllHistory
-                ? bookings
-                    .filter((b) => b.status !== "Pending")
-                    .sort((a, b) => (b.date > a.date ? 1 : -1))
-                : bookings
-                    .filter((b) => b.status !== "Pending")
-                    .sort((a, b) => (b.date > a.date ? 1 : -1))
-                    .slice(0, 2)
-              ).map((b, i) => (
-                <HistoryItem
-                  key={b.id || i}
-                  onClick={() => handleHistoryClick(b)}
-                >
-                  <span>
-                    <strong>{b.user}</strong> - {b.serviceType} ({b.status})
-                  </span>
-                  <span style={{ fontSize: "0.95em", color: "#888" }}>
-                    {b.date}
-                  </span>
-                </HistoryItem>
-              ))
+            {notificationModalOpen && activeNotification && (
+              <AdminModal
+                isOpen={notificationModalOpen}
+                onClose={() => setNotificationModalOpen(false)}
+                type="notes"
+                booking={activeNotification.booking}
+                onSubmit={() => setNotificationModalOpen(false)}
+              />
             )}
-          </HistoryList>
-          {bookings.filter((b) => b.status !== "Pending").length > 2 && (
-            <MarkReadButton
-              style={{ marginTop: 8, width: "100%" }}
-              onClick={() => setShowAllHistory((prev) => !prev)}
-            >
-              {showAllHistory ? "Show Less" : "Show All"}
-            </MarkReadButton>
-          )}
-          {historyModalOpen && activeHistory && (
-            <AdminModal
-              isOpen={historyModalOpen}
-              onClose={() => setHistoryModalOpen(false)}
-              type="notes"
-              booking={activeHistory}
-              onSubmit={() => setHistoryModalOpen(false)}
-            />
-          )}
-        </HistoryPanel>
-      </TopPanelsWrapper>
-      <CenteredMainCard>
+          </PanelCard>
+          <PanelCard>
+            <SectionTitle>History</SectionTitle>
+            <HistoryList>
+              {bookings.filter((b) => b.status !== "Pending").length === 0 ? (
+                <li>No history yet.</li>
+              ) : (
+                (showAllHistory
+                  ? bookings
+                      .filter((b) => b.status !== "Pending")
+                      .sort((a, b) => (b.date > a.date ? 1 : -1))
+                  : bookings
+                      .filter((b) => b.status !== "Pending")
+                      .sort((a, b) => (b.date > a.date ? 1 : -1))
+                      .slice(0, 2)
+                ).map((b, i) => (
+                  <HistoryItem
+                    key={b.id || i}
+                    onClick={() => handleHistoryClick(b)}
+                  >
+                    <span>
+                      <strong>{b.user}</strong> - {b.serviceType} ({b.status})
+                    </span>
+                    <span style={{ fontSize: "0.95em", color: "#888" }}>
+                      {b.date}
+                    </span>
+                  </HistoryItem>
+                ))
+              )}
+            </HistoryList>
+            {bookings.filter((b) => b.status !== "Pending").length > 2 && (
+              <MarkReadButton
+                style={{ marginTop: 8, width: "100%" }}
+                onClick={() => setShowAllHistory((prev) => !prev)}
+              >
+                {showAllHistory ? "Show Less" : "Show All"}
+              </MarkReadButton>
+            )}
+            {historyModalOpen && activeHistory && (
+              <AdminModal
+                isOpen={historyModalOpen}
+                onClose={() => setHistoryModalOpen(false)}
+                type="notes"
+                booking={activeHistory}
+                onSubmit={() => setHistoryModalOpen(false)}
+              />
+            )}
+          </PanelCard>
+        </TopPanelsWrapper>
         {/* Stats Section */}
         {isMobile ? (
           <StatsBlock>
@@ -755,11 +784,8 @@ const AdminDashboard: React.FC = () => {
             />
           </StatsGrid>
         )}
-        <ControlsSection
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-        >
+        {/* Filters & Bookings Section */}
+        <ControlsSection>
           <ControlsTitle>Filters & Search</ControlsTitle>
           <ControlsRow>
             <SearchInput
@@ -788,11 +814,7 @@ const AdminDashboard: React.FC = () => {
             </FilterSelect>
           </ControlsRow>
         </ControlsSection>
-        <BookingsSection
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-        >
+        <BookingsSection>
           <BookingsTitle>Bookings ({filteredBookings.length})</BookingsTitle>
           {filteredBookings.length === 0 ? (
             <EmptyState>
@@ -827,7 +849,7 @@ const AdminDashboard: React.FC = () => {
             </BookingsGrid>
           )}
         </BookingsSection>
-      </CenteredMainCard>
+      </MainCard>
     </Container>
   );
 };
