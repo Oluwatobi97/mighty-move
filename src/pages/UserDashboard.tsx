@@ -146,33 +146,6 @@ const UserDashboard: React.FC = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <TopPanelsWrapper>
-        <PanelCard>
-          <h3 style={{ marginBottom: 12 }}>Notifications</h3>
-          <div style={{ color: "#888" }}>No new notifications.</div>
-        </PanelCard>
-        <PanelCard>
-          <h3 style={{ marginBottom: 12 }}>History</h3>
-          {historyBookings.length === 0 ? (
-            <div style={{ color: "#888" }}>
-              No completed or cancelled bookings.
-            </div>
-          ) : (
-            <HistoryList>
-              {historyBookings.map((b, i) => (
-                <HistoryItem key={i}>
-                  <span>
-                    <strong>{b.serviceType}</strong> - {b.status}
-                  </span>
-                  <span style={{ fontSize: "0.95em", color: "#888" }}>
-                    {b.date}
-                  </span>
-                </HistoryItem>
-              ))}
-            </HistoryList>
-          )}
-        </PanelCard>
-      </TopPanelsWrapper>
       <Card
         initial={{ scale: 0.98, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -182,6 +155,33 @@ const UserDashboard: React.FC = () => {
           Welcome, {auth?.user?.name || "User"}!
         </h2>
         <ProfileLink to="/profile">View/Edit Profile</ProfileLink>
+        <TopPanelsWrapper>
+          <PanelCard>
+            <h3 style={{ marginBottom: 12 }}>Notifications</h3>
+            <div style={{ color: "#888" }}>No new notifications.</div>
+          </PanelCard>
+          <PanelCard>
+            <h3 style={{ marginBottom: 12 }}>History</h3>
+            {historyBookings.length === 0 ? (
+              <div style={{ color: "#888" }}>
+                No completed or cancelled bookings.
+              </div>
+            ) : (
+              <HistoryList>
+                {historyBookings.map((b, i) => (
+                  <HistoryItem key={i}>
+                    <span>
+                      <strong>{b.serviceType}</strong> - {b.status}
+                    </span>
+                    <span style={{ fontSize: "0.95em", color: "#888" }}>
+                      {b.date}
+                    </span>
+                  </HistoryItem>
+                ))}
+              </HistoryList>
+            )}
+          </PanelCard>
+        </TopPanelsWrapper>
         <Title>User Dashboard</Title>
         <ArticleText>
           View and manage all your bookings in one place. Track active services,
