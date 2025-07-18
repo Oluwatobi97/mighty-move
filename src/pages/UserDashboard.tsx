@@ -77,6 +77,48 @@ const Spinner = styled.div`
   }
 `;
 
+const TopPanelsWrapper = styled.div`
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+  @media (max-width: 900px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+  }
+`;
+const PanelCard = styled(Card)`
+  max-width: 400px;
+  margin-bottom: 0;
+  padding: 1.5rem 1.2rem;
+  @media (max-width: 700px) {
+    padding: 1.2rem 0.5rem;
+    margin-bottom: 1.2rem;
+  }
+`;
+const HistoryList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+`;
+const HistoryItem = styled.li`
+  background: #f4faff;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  padding: 1rem 1.2rem;
+  font-weight: 500;
+  box-shadow: 0 2px 8px 0 rgba(31, 38, 135, 0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: background 0.2s;
+  &:hover {
+    background: #dbefff;
+  }
+`;
+
 const UserDashboard: React.FC = () => {
   const auth = useContext(AuthContext);
   const [bookings, setBookings] = useState<any[]>([]);
@@ -90,12 +132,47 @@ const UserDashboard: React.FC = () => {
     });
   }, []);
 
+  // Split bookings into ongoing and history
+  const ongoingBookings = bookings.filter(
+    (b) => b.status === "Pending" || b.status === "In Progress"
+  );
+  const historyBookings = bookings.filter(
+    (b) => b.status === "Completed" || b.status === "Cancelled"
+  );
+
   return (
     <Container
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
+      <TopPanelsWrapper>
+        <PanelCard>
+          <h3 style={{ marginBottom: 12 }}>Notifications</h3>
+          <div style={{ color: "#888" }}>No new notifications.</div>
+        </PanelCard>
+        <PanelCard>
+          <h3 style={{ marginBottom: 12 }}>History</h3>
+          {historyBookings.length === 0 ? (
+            <div style={{ color: "#888" }}>
+              No completed or cancelled bookings.
+            </div>
+          ) : (
+            <HistoryList>
+              {historyBookings.map((b, i) => (
+                <HistoryItem key={i}>
+                  <span>
+                    <strong>{b.serviceType}</strong> - {b.status}
+                  </span>
+                  <span style={{ fontSize: "0.95em", color: "#888" }}>
+                    {b.date}
+                  </span>
+                </HistoryItem>
+              ))}
+            </HistoryList>
+          )}
+        </PanelCard>
+      </TopPanelsWrapper>
       <Card
         initial={{ scale: 0.98, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -113,11 +190,11 @@ const UserDashboard: React.FC = () => {
         </ArticleText>
         {loading ? (
           <Spinner />
-        ) : bookings.length === 0 ? (
-          <div>No bookings found.</div>
+        ) : ongoingBookings.length === 0 ? (
+          <div>No ongoing bookings found.</div>
         ) : (
           <BookingsList>
-            {bookings.map((b, i) => (
+            {ongoingBookings.map((b, i) => (
               <BookingCard key={i} {...b} />
             ))}
           </BookingsList>
