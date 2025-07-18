@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import BookingCard from "../components/BookingCard";
 import { mockGetBookings } from "../utils/api";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 const Container = styled(motion.div)`
   padding: 2.5rem 2rem 2rem 2rem;
@@ -77,6 +78,7 @@ const Spinner = styled.div`
 `;
 
 const UserDashboard: React.FC = () => {
+  const auth = useContext(AuthContext);
   const [bookings, setBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -92,13 +94,16 @@ const UserDashboard: React.FC = () => {
     <Container
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7 }}
+      transition={{ duration: 0.3 }}
     >
       <Card
-        initial={{ scale: 0.95, opacity: 0 }}
+        initial={{ scale: 0.98, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.7, delay: 0.2 }}
+        transition={{ duration: 0.3, delay: 0.1 }}
       >
+        <h2 style={{ marginBottom: "1.2rem" }}>
+          Welcome, {auth?.user?.name || "User"}!
+        </h2>
         <ProfileLink to="/profile">View/Edit Profile</ProfileLink>
         <Title>User Dashboard</Title>
         <ArticleText>
