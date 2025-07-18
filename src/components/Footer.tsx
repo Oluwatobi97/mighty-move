@@ -32,20 +32,6 @@ const Footer: React.FC = () => (
       <a href="tel:+447904893167">+44 7904 893167</a>,{" "}
       <a href="tel:+447350164970">+44 7350 164970</a>
     </FooterSection>
-    <FooterSection>
-      <FooterLabel>Payment Methods:</FooterLabel>
-      <br />
-      <b>Bank:</b> Santander PLC
-      <br />
-      <b>Account Name:</b> O S Odunaiya
-      <br />
-      <b>Sort Code:</b> 09-01-27
-      <br />
-      <b>Account Number:</b> 19477556
-      <br />
-      <b>PayPal:</b>{" "}
-      <a href="mailto:Olumidy_sezy@hotmail.co.uk">Olumidy_sezy@hotmail.co.uk</a>
-    </FooterSection>
     <div style={{ fontSize: "0.95em", color: "#888", marginTop: 8 }}>
       &copy; {new Date().getFullYear()} Mighty Moves. All rights reserved.
     </div>

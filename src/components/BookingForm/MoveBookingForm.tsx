@@ -48,6 +48,16 @@ const Error = styled.div`
   margin-top: -1rem;
 `;
 
+const PaymentSection = styled.div`
+  background: #fffde7;
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  margin-top: 1.5rem;
+  font-size: 1rem;
+  color: #444;
+  box-shadow: 0 2px 8px 0 rgba(31, 38, 135, 0.06);
+`;
+
 const vehicleOptions = [
   "Small Van",
   "Medium Truck",
@@ -137,6 +147,22 @@ const MoveBookingForm: React.FC = () => {
         />
       </div>
       {error && <Error>{error}</Error>}
+      <PaymentSection>
+        <b>Payment Methods:</b>
+        <br />
+        <b>Bank:</b> Santander PLC
+        <br />
+        <b>Account Name:</b> O S Odunaiya
+        <br />
+        <b>Sort Code:</b> 09-01-27
+        <br />
+        <b>Account Number:</b> 19477556
+        <br />
+        <b>PayPal:</b>{" "}
+        <a href="mailto:Olumidy_sezy@hotmail.co.uk">
+          Olumidy_sezy@hotmail.co.uk
+        </a>
+      </PaymentSection>
       <Button type="submit">Book Move</Button>
       {success && (
         <motion.div
