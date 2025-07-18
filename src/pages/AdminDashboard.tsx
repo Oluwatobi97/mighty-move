@@ -350,6 +350,23 @@ const HistoryItem = styled.li`
   }
 `;
 
+const ResponsiveCard = styled(BookingsSection)`
+  @media (max-width: 700px) {
+    padding: 1.2rem 0.5rem;
+    margin-bottom: 1.2rem;
+  }
+`;
+
+const CenteredPanel = styled(NotificationsPanel)`
+  @media (max-width: 700px) {
+    margin: 0 auto 1.5rem auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+`;
+
 const AdminDashboard: React.FC = () => {
   const [bookings, setBookings] = useState<any[]>([]);
   const [filteredBookings, setFilteredBookings] = useState<any[]>([]);
@@ -542,7 +559,56 @@ const AdminDashboard: React.FC = () => {
         </Subtitle>
       </Header>
       <MainContent>
-        <DashboardSection>
+        <CenteredPanel>
+          <NotificationsTitle>Notifications</NotificationsTitle>
+          <NotificationList>
+            {notifications.length === 0 ? (
+              <li>No notifications.</li>
+            ) : (
+              (showAllNotifications
+                ? notifications
+                : notifications.slice(0, 2)
+              ).map((n, i) => (
+                <NotificationItem
+                  key={i}
+                  unread={!readNotifications.has(i)}
+                  onClick={() => handleNotificationClick(n, i)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <span>{n.message}</span>
+                  {!readNotifications.has(i) && (
+                    <MarkReadButton
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleMarkNotificationRead(i);
+                      }}
+                    >
+                      Mark as Read
+                    </MarkReadButton>
+                  )}
+                </NotificationItem>
+              ))
+            )}
+          </NotificationList>
+          {notifications.length > 2 && (
+            <MarkReadButton
+              style={{ marginTop: 8, width: "100%" }}
+              onClick={() => setShowAllNotifications((prev) => !prev)}
+            >
+              {showAllNotifications ? "Show Less" : "Show All"}
+            </MarkReadButton>
+          )}
+          {notificationModalOpen && activeNotification && (
+            <AdminModal
+              isOpen={notificationModalOpen}
+              onClose={() => setNotificationModalOpen(false)}
+              type="notes"
+              booking={activeNotification.booking}
+              onSubmit={() => setNotificationModalOpen(false)}
+            />
+          )}
+        </CenteredPanel>
+        <ResponsiveCard>
           {/* Stats Section */}
           {isMobile ? (
             <StatsBlock>
@@ -692,57 +758,8 @@ const AdminDashboard: React.FC = () => {
               </BookingsGrid>
             )}
           </BookingsSection>
-        </DashboardSection>
+        </ResponsiveCard>
         <PanelsWrapper>
-          <NotificationsPanel>
-            <NotificationsTitle>Notifications</NotificationsTitle>
-            <NotificationList>
-              {notifications.length === 0 ? (
-                <li>No notifications.</li>
-              ) : (
-                (showAllNotifications
-                  ? notifications
-                  : notifications.slice(0, 2)
-                ).map((n, i) => (
-                  <NotificationItem
-                    key={i}
-                    unread={!readNotifications.has(i)}
-                    onClick={() => handleNotificationClick(n, i)}
-                    style={{ cursor: "pointer" }}
-                  >
-                    <span>{n.message}</span>
-                    {!readNotifications.has(i) && (
-                      <MarkReadButton
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleMarkNotificationRead(i);
-                        }}
-                      >
-                        Mark as Read
-                      </MarkReadButton>
-                    )}
-                  </NotificationItem>
-                ))
-              )}
-            </NotificationList>
-            {notifications.length > 2 && (
-              <MarkReadButton
-                style={{ marginTop: 8, width: "100%" }}
-                onClick={() => setShowAllNotifications((prev) => !prev)}
-              >
-                {showAllNotifications ? "Show Less" : "Show All"}
-              </MarkReadButton>
-            )}
-            {notificationModalOpen && activeNotification && (
-              <AdminModal
-                isOpen={notificationModalOpen}
-                onClose={() => setNotificationModalOpen(false)}
-                type="notes"
-                booking={activeNotification.booking}
-                onSubmit={() => setNotificationModalOpen(false)}
-              />
-            )}
-          </NotificationsPanel>
           <HistoryPanel>
             <HistoryTitle>History</HistoryTitle>
             <HistoryList>

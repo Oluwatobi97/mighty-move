@@ -50,12 +50,12 @@ const About: React.FC = () => (
   <Wrapper
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
-    transition={{ duration: 0.7 }}
+    transition={{ duration: 0.3 }}
   >
     <Card
       initial={{ scale: 0.95, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
-      transition={{ duration: 0.7, delay: 0.2 }}
+      transition={{ duration: 0.3, delay: 0.1 }}
     >
       <Title>About Mighty Moves</Title>
       <Subtitle>
@@ -69,11 +69,33 @@ const About: React.FC = () => (
         focus on what matters most. We believe in transparency, efficiency, and
         a customer-first approach.
       </Subtitle>
-      <SectionTitle>Contact Us</SectionTitle>
+      <SectionTitle>Contact</SectionTitle>
       <Subtitle>
-        Have questions or need support? Email us at{" "}
-        <a href="mailto:support@mightymoves.co.uk">support@mightymoves.co.uk</a>{" "}
-        and our team will be happy to help.
+        <b>Email:</b>{" "}
+        <a href="mailto:oladokunabiola969@gmail.com">
+          oladokunabiola969@gmail.com
+        </a>
+        <br />
+        <b>Phone:</b> <a href="tel:+447904893167">+44 7904 893167</a>,{" "}
+        <a href="tel:+447350164970">+44 7350 164970</a>
+      </Subtitle>
+      <SectionTitle>Payment Methods</SectionTitle>
+      <Subtitle>
+        <b>Bank Transfer:</b>
+        <br />
+        Bank: Santander PLC
+        <br />
+        Account Name: O S Odunaiya
+        <br />
+        Sort Code: 09-01-27
+        <br />
+        Account Number: 19477556
+        <br />
+        <br />
+        <b>PayPal:</b>{" "}
+        <a href="mailto:Olumidy_sezy@hotmail.co.uk">
+          Olumidy_sezy@hotmail.co.uk
+        </a>
       </Subtitle>
     </Card>
   </Wrapper>
