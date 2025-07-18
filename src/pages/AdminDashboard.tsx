@@ -367,6 +367,27 @@ const CenteredPanel = styled(NotificationsPanel)`
   }
 `;
 
+const TopPanelsWrapper = styled.div`
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+  @media (max-width: 900px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+  }
+`;
+
+const CenteredMainCard = styled(ResponsiveCard)`
+  margin: 0 auto;
+  max-width: 700px;
+  @media (max-width: 700px) {
+    padding: 1.2rem 0.5rem;
+    margin-bottom: 1.2rem;
+  }
+`;
+
 const AdminDashboard: React.FC = () => {
   const [bookings, setBookings] = useState<any[]>([]);
   const [filteredBookings, setFilteredBookings] = useState<any[]>([]);
@@ -558,7 +579,7 @@ const AdminDashboard: React.FC = () => {
           Manage all service requests, assign workers, and track performance
         </Subtitle>
       </Header>
-      <MainContent>
+      <TopPanelsWrapper>
         <CenteredPanel>
           <NotificationsTitle>Notifications</NotificationsTitle>
           <NotificationList>
@@ -608,215 +629,205 @@ const AdminDashboard: React.FC = () => {
             />
           )}
         </CenteredPanel>
-        <ResponsiveCard>
-          {/* Stats Section */}
-          {isMobile ? (
-            <StatsBlock>
-              <StatRow>
-                <span>Total Bookings</span>
-                <span>{stats?.total ?? 0}</span>
-              </StatRow>
-              <StatRow>
-                <span>Pending</span>
-                <span>{stats?.pending ?? 0}</span>
-              </StatRow>
-              <StatRow>
-                <span>In Progress</span>
-                <span>{stats?.inProgress ?? 0}</span>
-              </StatRow>
-              <StatRow>
-                <span>Completed</span>
-                <span>{stats?.completed ?? 0}</span>
-              </StatRow>
-              <StatRow>
-                <span>Revenue</span>
-                <span>
-                  {stats?.revenue?.toLocaleString("en-GB", {
-                    style: "currency",
-                    currency: "GBP",
-                  }) ?? "£0.00"}
-                </span>
-              </StatRow>
-              <StatRow>
-                <span>This Month</span>
-                <span>{stats?.thisMonth ?? 0}</span>
-              </StatRow>
-            </StatsBlock>
-          ) : (
-            <StatsGrid
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              <StatsCard
-                value={stats?.total ?? 0}
-                label="Total Bookings"
-                delay={0.1}
-              />
-              <StatsCard
-                value={stats?.pending ?? 0}
-                label="Pending"
-                delay={0.2}
-              />
-              <StatsCard
-                value={stats?.inProgress ?? 0}
-                label="In Progress"
-                delay={0.3}
-              />
-              <StatsCard
-                value={stats?.completed ?? 0}
-                label="Completed"
-                delay={0.4}
-              />
-              <StatsCard
-                value={
-                  stats?.revenue?.toLocaleString("en-GB", {
-                    style: "currency",
-                    currency: "GBP",
-                  }) ?? "£0.00"
-                }
-                label="Revenue"
-                delay={0.5}
-              />
-              <StatsCard
-                value={stats?.thisMonth ?? 0}
-                label="This Month"
-                change={100}
-                delay={0.6}
-              />
-            </StatsGrid>
-          )}
-          <ControlsSection
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-          >
-            <ControlsTitle>Filters & Search</ControlsTitle>
-            <ControlsRow>
-              <SearchInput
-                placeholder="Search by customer, service, or address..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <FilterSelect
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-              >
-                <option value="">All Statuses</option>
-                <option value="Pending">Pending</option>
-                <option value="In Progress">In Progress</option>
-                <option value="Completed">Completed</option>
-                <option value="Cancelled">Cancelled</option>
-              </FilterSelect>
-              <FilterSelect
-                value={serviceFilter}
-                onChange={(e) => setServiceFilter(e.target.value)}
-              >
-                <option value="">All Services</option>
-                <option value="Moving">Moving</option>
-                <option value="Waste">Waste</option>
-                <option value="Logistics">Logistics</option>
-              </FilterSelect>
-            </ControlsRow>
-          </ControlsSection>
-          <BookingsSection
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-          >
-            <BookingsTitle>Bookings ({filteredBookings.length})</BookingsTitle>
-            {filteredBookings.length === 0 ? (
-              <EmptyState>
-                {searchTerm || statusFilter || serviceFilter
-                  ? "No bookings match your filters."
-                  : "No bookings found."}
-              </EmptyState>
+        <HistoryPanel>
+          <HistoryTitle>History</HistoryTitle>
+          <HistoryList>
+            {bookings.filter((b) => b.status !== "Pending").length === 0 ? (
+              <li>No history yet.</li>
             ) : (
-              <BookingsGrid>
-                {filteredBookings.map((booking) => (
-                  <BookingWrapper key={booking.id}>
-                    <BookingCard {...booking} isAdmin={true} />
-                    {booking.status === "Pending" && (
-                      <ControlButton
-                        variant="primary"
-                        onClick={() => handleApproveBooking(booking)}
-                      >
-                        Approve
-                      </ControlButton>
-                    )}
-                    <ControlButton onClick={() => openModal("status", booking)}>
-                      Update Status
-                    </ControlButton>
-                    <ControlButton onClick={() => openModal("worker", booking)}>
-                      Assign Worker
-                    </ControlButton>
-                    <ControlButton onClick={() => openModal("notes", booking)}>
-                      Add Notes
-                    </ControlButton>
-                  </BookingWrapper>
-                ))}
-              </BookingsGrid>
+              (showAllHistory
+                ? bookings
+                    .filter((b) => b.status !== "Pending")
+                    .sort((a, b) => (b.date > a.date ? 1 : -1))
+                : bookings
+                    .filter((b) => b.status !== "Pending")
+                    .sort((a, b) => (b.date > a.date ? 1 : -1))
+                    .slice(0, 2)
+              ).map((b, i) => (
+                <HistoryItem
+                  key={b.id || i}
+                  onClick={() => handleHistoryClick(b)}
+                >
+                  <span>
+                    <strong>{b.user}</strong> - {b.serviceType} ({b.status})
+                  </span>
+                  <span style={{ fontSize: "0.95em", color: "#888" }}>
+                    {b.date}
+                  </span>
+                </HistoryItem>
+              ))
             )}
-          </BookingsSection>
-        </ResponsiveCard>
-        <PanelsWrapper>
-          <HistoryPanel>
-            <HistoryTitle>History</HistoryTitle>
-            <HistoryList>
-              {bookings.filter((b) => b.status !== "Pending").length === 0 ? (
-                <li>No history yet.</li>
-              ) : (
-                (showAllHistory
-                  ? bookings
-                      .filter((b) => b.status !== "Pending")
-                      .sort((a, b) => (b.date > a.date ? 1 : -1))
-                  : bookings
-                      .filter((b) => b.status !== "Pending")
-                      .sort((a, b) => (b.date > a.date ? 1 : -1))
-                      .slice(0, 2)
-                ).map((b, i) => (
-                  <HistoryItem
-                    key={b.id || i}
-                    onClick={() => handleHistoryClick(b)}
-                  >
-                    <span>
-                      <strong>{b.user}</strong> - {b.serviceType} ({b.status})
-                    </span>
-                    <span style={{ fontSize: "0.95em", color: "#888" }}>
-                      {b.date}
-                    </span>
-                  </HistoryItem>
-                ))
-              )}
-            </HistoryList>
-            {bookings.filter((b) => b.status !== "Pending").length > 2 && (
-              <MarkReadButton
-                style={{ marginTop: 8, width: "100%" }}
-                onClick={() => setShowAllHistory((prev) => !prev)}
-              >
-                {showAllHistory ? "Show Less" : "Show All"}
-              </MarkReadButton>
-            )}
-            {historyModalOpen && activeHistory && (
-              <AdminModal
-                isOpen={historyModalOpen}
-                onClose={() => setHistoryModalOpen(false)}
-                type="notes"
-                booking={activeHistory}
-                onSubmit={() => setHistoryModalOpen(false)}
-              />
-            )}
-          </HistoryPanel>
-        </PanelsWrapper>
-      </MainContent>
-      <AdminModal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        type={modalType}
-        booking={selectedBooking}
-        onSubmit={handleModalSubmit}
-        workers={workers}
-      />
+          </HistoryList>
+          {bookings.filter((b) => b.status !== "Pending").length > 2 && (
+            <MarkReadButton
+              style={{ marginTop: 8, width: "100%" }}
+              onClick={() => setShowAllHistory((prev) => !prev)}
+            >
+              {showAllHistory ? "Show Less" : "Show All"}
+            </MarkReadButton>
+          )}
+          {historyModalOpen && activeHistory && (
+            <AdminModal
+              isOpen={historyModalOpen}
+              onClose={() => setHistoryModalOpen(false)}
+              type="notes"
+              booking={activeHistory}
+              onSubmit={() => setHistoryModalOpen(false)}
+            />
+          )}
+        </HistoryPanel>
+      </TopPanelsWrapper>
+      <CenteredMainCard>
+        {/* Stats Section */}
+        {isMobile ? (
+          <StatsBlock>
+            <StatRow>
+              <span>Total Bookings</span>
+              <span>{stats?.total ?? 0}</span>
+            </StatRow>
+            <StatRow>
+              <span>Pending</span>
+              <span>{stats?.pending ?? 0}</span>
+            </StatRow>
+            <StatRow>
+              <span>In Progress</span>
+              <span>{stats?.inProgress ?? 0}</span>
+            </StatRow>
+            <StatRow>
+              <span>Completed</span>
+              <span>{stats?.completed ?? 0}</span>
+            </StatRow>
+            <StatRow>
+              <span>Revenue</span>
+              <span>
+                {stats?.revenue?.toLocaleString("en-GB", {
+                  style: "currency",
+                  currency: "GBP",
+                }) ?? "£0.00"}
+              </span>
+            </StatRow>
+            <StatRow>
+              <span>This Month</span>
+              <span>{stats?.thisMonth ?? 0}</span>
+            </StatRow>
+          </StatsBlock>
+        ) : (
+          <StatsGrid
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <StatsCard
+              value={stats?.total ?? 0}
+              label="Total Bookings"
+              delay={0.1}
+            />
+            <StatsCard
+              value={stats?.pending ?? 0}
+              label="Pending"
+              delay={0.2}
+            />
+            <StatsCard
+              value={stats?.inProgress ?? 0}
+              label="In Progress"
+              delay={0.3}
+            />
+            <StatsCard
+              value={stats?.completed ?? 0}
+              label="Completed"
+              delay={0.4}
+            />
+            <StatsCard
+              value={
+                stats?.revenue?.toLocaleString("en-GB", {
+                  style: "currency",
+                  currency: "GBP",
+                }) ?? "£0.00"
+              }
+              label="Revenue"
+              delay={0.5}
+            />
+            <StatsCard
+              value={stats?.thisMonth ?? 0}
+              label="This Month"
+              change={100}
+              delay={0.6}
+            />
+          </StatsGrid>
+        )}
+        <ControlsSection
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
+          <ControlsTitle>Filters & Search</ControlsTitle>
+          <ControlsRow>
+            <SearchInput
+              placeholder="Search by customer, service, or address..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <FilterSelect
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+            >
+              <option value="">All Statuses</option>
+              <option value="Pending">Pending</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Completed">Completed</option>
+              <option value="Cancelled">Cancelled</option>
+            </FilterSelect>
+            <FilterSelect
+              value={serviceFilter}
+              onChange={(e) => setServiceFilter(e.target.value)}
+            >
+              <option value="">All Services</option>
+              <option value="Moving">Moving</option>
+              <option value="Waste">Waste</option>
+              <option value="Logistics">Logistics</option>
+            </FilterSelect>
+          </ControlsRow>
+        </ControlsSection>
+        <BookingsSection
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+        >
+          <BookingsTitle>Bookings ({filteredBookings.length})</BookingsTitle>
+          {filteredBookings.length === 0 ? (
+            <EmptyState>
+              {searchTerm || statusFilter || serviceFilter
+                ? "No bookings match your filters."
+                : "No bookings found."}
+            </EmptyState>
+          ) : (
+            <BookingsGrid>
+              {filteredBookings.map((booking) => (
+                <BookingWrapper key={booking.id}>
+                  <BookingCard {...booking} isAdmin={true} />
+                  {booking.status === "Pending" && (
+                    <ControlButton
+                      variant="primary"
+                      onClick={() => handleApproveBooking(booking)}
+                    >
+                      Approve
+                    </ControlButton>
+                  )}
+                  <ControlButton onClick={() => openModal("status", booking)}>
+                    Update Status
+                  </ControlButton>
+                  <ControlButton onClick={() => openModal("worker", booking)}>
+                    Assign Worker
+                  </ControlButton>
+                  <ControlButton onClick={() => openModal("notes", booking)}>
+                    Add Notes
+                  </ControlButton>
+                </BookingWrapper>
+              ))}
+            </BookingsGrid>
+          )}
+        </BookingsSection>
+      </CenteredMainCard>
     </Container>
   );
 };

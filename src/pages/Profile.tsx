@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { mockGetBookings } from "../utils/api";
 import { toast } from "react-toastify";
+import { AuthContext } from "../context/AuthContext";
 
 const Container = styled(motion.div)`
   max-width: 600px;
@@ -61,10 +62,11 @@ const BookingItem = styled.li`
 `;
 
 const Profile: React.FC = () => {
-  // Mock user info
+  const auth = useContext(AuthContext);
+  // Use real user info from context if available
   const [user, setUser] = useState({
-    name: "John Doe",
-    email: "user@example.com",
+    name: auth?.user?.name || "John Doe",
+    email: auth?.user?.email || "user@example.com",
   });
   const [edit, setEdit] = useState(false);
   const [form, setForm] = useState(user);
@@ -87,7 +89,7 @@ const Profile: React.FC = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm({ ...form, [e.target.name]: e.target.value });
   const handleSave = () => {
-    setUser(form);
+    setUser({ ...user, name: form.name }); // Only update name
     setEdit(false);
     toast.success("Profile updated! (mock)");
   };
@@ -109,7 +111,7 @@ const Profile: React.FC = () => {
             </div>
             <div>
               <Label>Email:</Label>
-              <Input name="email" value={form.email} onChange={handleChange} />
+              <Input name="email" value={form.email} disabled />
             </div>
             <Button onClick={handleSave}>Save</Button>{" "}
             <Button onClick={handleCancel} style={{ background: "#888" }}>
@@ -126,7 +128,7 @@ const Profile: React.FC = () => {
               <Label>Email:</Label>
               {user.email}
             </div>
-            <Button onClick={handleEdit}>Edit</Button>
+            <Button onClick={handleEdit}>Edit Name</Button>
           </>
         )}
       </Section>
