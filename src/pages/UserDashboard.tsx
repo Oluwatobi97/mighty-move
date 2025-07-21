@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import BookingCard from "../components/BookingCard";
-import { mockGetBookings } from "../utils/api";
+import { getUserBookings } from "../utils/api";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
@@ -155,11 +155,21 @@ const UserDashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
-    mockGetBookings().then((data: any) => {
-      setBookings(data);
+    const token = localStorage.getItem("token");
+    if (token) {
+      setLoading(true);
+      getUserBookings(token)
+        .then((data: any) => {
+          setBookings(data);
+          setLoading(false);
+        })
+        .catch(() => {
+          setLoading(false);
+          // Handle error, e.g., show a toast notification
+        });
+    } else {
       setLoading(false);
-    });
+    }
   }, []);
 
   // Split bookings into ongoing and history

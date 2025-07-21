@@ -12,9 +12,8 @@ export const register = async (data: {
   password: string;
 }) => {
   const res = await api.post("/users/register", data);
-  // For now, return a mock token and the user
   return {
-    token: "mock-token",
+    token: "mock-token", // This will be replaced after login
     user: res.data.user,
   };
 };
@@ -25,6 +24,50 @@ export const login = async (data: { email: string; password: string }) => {
     token: res.data.token,
     user: res.data.user,
   };
+};
+
+// Fetch real user info using JWT token
+export const getUserInfo = async (token: string) => {
+  const res = await api.get("/users/me", {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return res.data.user;
+};
+
+// Fetch bookings for the logged-in user
+export const getUserBookings = async (token: string) => {
+  const res = await api.get("/bookings/user", {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return res.data;
+};
+
+// Fetch all bookings (admin)
+export const getAllBookings = async (token: string) => {
+  const res = await api.get("/bookings", {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return res.data;
+};
+
+// Create a new booking
+export const createBooking = async (data: any, token: string) => {
+  const res = await api.post("/bookings", data, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return res.data.booking;
+};
+
+// Approve a booking (admin)
+export const approveBooking = async (bookingId: number, token: string) => {
+  const res = await api.patch(
+    `/bookings/${bookingId}/approve`,
+    {},
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
+  return res.data.booking;
 };
 
 // --- MOCK API FUNCTIONS ---

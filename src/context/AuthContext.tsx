@@ -1,4 +1,5 @@
 import React, { createContext, useState, ReactNode, useEffect } from "react";
+import { getUserInfo } from "../utils/api";
 
 interface AuthContextType {
   user: any;
@@ -11,14 +12,27 @@ export const AuthContext = createContext<AuthContextType | undefined>(
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token && !user) {
-      // In a real app, fetch user info with the token here
-      setUser({ name: "User" }); // Set a dummy user for now
+    if (token) {
+      getUserInfo(token)
+        .then((user) => {
+          setUser(user);
+          setLoading(false);
+        })
+        .catch(() => {
+          setUser(null);
+          localStorage.removeItem("token");
+          setLoading(false);
+        });
+    } else {
+      setLoading(false);
     }
-  }, [user]);
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>
