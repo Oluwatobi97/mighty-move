@@ -2,8 +2,8 @@ import React, { useRef } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import ServiceForm from "../components/ServiceForm";
-import { mockBookService } from "../utils/api";
-import { toast } from "react-toastify";
+import { createBooking } from "../utils/api";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled(motion.div)`
   padding: 2.5rem 2rem 2rem 2rem;
@@ -66,9 +66,27 @@ const fields = [
 
 const LogisticsBooking: React.FC = () => {
   const formRef = useRef<any>(null);
+  const navigate = useNavigate();
   const handleSubmit = async (values: Record<string, string>) => {
-    await mockBookService(values);
-    toast.success("Logistics booking submitted!");
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) throw new (window as any).Error("Not authenticated");
+      await createBooking(
+        {
+          service_type: "Logistics",
+          address: `${values.sender} to ${values.receiver}`,
+          date: new Date().toISOString(), // You can update this to use a real date field
+          price: 0, // Add price logic if needed
+          package: values.package,
+          delivery_type: values.deliveryType,
+        },
+        token
+      );
+      navigate("/home");
+    } catch (err: any) {
+      // You can show a toast or error message here
+      alert(err.message || "Booking failed. Try again.");
+    }
     if (formRef.current && formRef.current.reset) formRef.current.reset();
   };
   return (
@@ -90,6 +108,7 @@ const LogisticsBooking: React.FC = () => {
         </ArticleText>
       </Card>
       <ServiceForm
+        ref={formRef}
         fields={fields}
         onSubmit={handleSubmit}
         submitLabel="Send Package"

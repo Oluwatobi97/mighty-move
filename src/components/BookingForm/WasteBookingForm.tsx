@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import { createBooking } from "../../utils/api";
 
 const FormCard = styled(motion.form)`
   background: #fff;
@@ -79,7 +81,8 @@ const WasteBookingForm: React.FC = () => {
     frequency: "",
   });
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -88,15 +91,34 @@ const WasteBookingForm: React.FC = () => {
     setError("");
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.wasteType || !form.address || !form.frequency) {
       setError("Please fill in all fields.");
       return;
     }
-    setSuccess(true);
-    setTimeout(() => setSuccess(false), 2500);
-    // Here you would send the form data to the backend
+    setLoading(true);
+    setError("");
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) throw new (window as any).Error("Not authenticated");
+      await createBooking(
+        {
+          service_type: "Waste",
+          address: form.address,
+          date: new Date().toISOString(), // You can update this to use a real date field
+          price: 0, // Add price logic if needed
+          waste_type: form.wasteType,
+          frequency: form.frequency,
+        },
+        token
+      );
+      navigate("/home");
+    } catch (err: any) {
+      setError(err.message || "Booking failed. Try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -162,16 +184,9 @@ const WasteBookingForm: React.FC = () => {
           Olumidy_sezy@hotmail.co.uk
         </a>
       </PaymentSection>
-      <Button type="submit">Book Waste Pickup</Button>
-      {success && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          style={{ color: "#388e3c", marginTop: 8 }}
-        >
-          Booking submitted!
-        </motion.div>
-      )}
+      <Button type="submit" disabled={loading}>
+        {loading ? "Booking..." : "Book Waste Pickup"}
+      </Button>
     </FormCard>
   );
 };

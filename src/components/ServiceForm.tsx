@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef, useImperativeHandle } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
@@ -94,173 +94,186 @@ const ModalButton = styled.button`
   cursor: pointer;
 `;
 
-const ServiceForm: React.FC<ServiceFormProps> = ({
-  fields,
-  onSubmit,
-  submitLabel = "Submit",
-}) => {
-  const [values, setValues] = React.useState<Record<string, string>>({});
-  const [error, setError] = React.useState("");
-  const [success, setSuccess] = React.useState(false);
-  const [termsAccepted, setTermsAccepted] = React.useState(false);
-  const [showPaymentModal, setShowPaymentModal] = React.useState(false);
-  const [modalPaymentMethod, setModalPaymentMethod] = React.useState<
-    string | null
-  >(null);
-  const [paymentModalClosed, setPaymentModalClosed] = React.useState(false);
+type ServiceFormHandle = {
+  reset: () => void;
+};
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
-    setError("");
-    if (e.target.name === "paymentMethod" && e.target.value) {
-      setModalPaymentMethod(e.target.value);
-      setShowPaymentModal(true);
-      setPaymentModalClosed(false);
-    }
-  };
+const ServiceForm = forwardRef<ServiceFormHandle, ServiceFormProps>(
+  ({ fields, onSubmit, submitLabel = "Submit" }, ref) => {
+    const formRef = React.useRef<HTMLFormElement>(null);
+    const [values, setValues] = React.useState<Record<string, string>>({});
+    const [error, setError] = React.useState("");
+    const [success, setSuccess] = React.useState(false);
+    const [termsAccepted, setTermsAccepted] = React.useState(false);
+    const [showPaymentModal, setShowPaymentModal] = React.useState(false);
+    const [modalPaymentMethod, setModalPaymentMethod] = React.useState<
+      string | null
+    >(null);
+    const [paymentModalClosed, setPaymentModalClosed] = React.useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    for (const field of fields) {
-      if (!values[field.name]) {
-        setError("Please fill in all fields.");
+    useImperativeHandle(ref, () => ({
+      reset: () => {
+        setValues({});
+        if (formRef.current) formRef.current.reset();
+      },
+    }));
+
+    const handleChange = (
+      e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    ) => {
+      setValues({ ...values, [e.target.name]: e.target.value });
+      setError("");
+      if (e.target.name === "paymentMethod" && e.target.value) {
+        setModalPaymentMethod(e.target.value);
+        setShowPaymentModal(true);
+        setPaymentModalClosed(false);
+      }
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+      e.preventDefault();
+      for (const field of fields) {
+        if (!values[field.name]) {
+          setError("Please fill in all fields.");
+          return;
+        }
+      }
+      if (!values.paymentMethod) {
+        setError("Please select a payment method.");
         return;
       }
-    }
-    if (!values.paymentMethod) {
-      setError("Please select a payment method.");
-      return;
-    }
-    if (!paymentModalClosed) {
-      setError("Please review payment instructions and click Continue.");
-      return;
-    }
-    if (!termsAccepted) {
-      setError("You must agree to the Terms and Conditions.");
-      return;
-    }
-    setSuccess(true);
-    setTimeout(() => setSuccess(false), 2000);
-    onSubmit({ ...values, paymentMethod: values.paymentMethod });
-  };
+      if (!paymentModalClosed) {
+        setError("Please review payment instructions and click Continue.");
+        return;
+      }
+      if (!termsAccepted) {
+        setError("You must agree to the Terms and Conditions.");
+        return;
+      }
+      setSuccess(true);
+      setTimeout(() => setSuccess(false), 2000);
+      onSubmit({ ...values, paymentMethod: values.paymentMethod });
+    };
 
-  const handleCloseModal = () => {
-    setShowPaymentModal(false);
-    setPaymentModalClosed(true);
-  };
+    const handleCloseModal = () => {
+      setShowPaymentModal(false);
+      setPaymentModalClosed(true);
+    };
 
-  return (
-    <>
-      <form
-        onSubmit={handleSubmit}
-        style={{ display: "flex", flexDirection: "column", gap: 16 }}
-      >
-        {fields.map((field) => (
-          <div key={field.name}>
-            <label htmlFor={field.name} style={{ fontWeight: 600 }}>
-              {field.label}
-            </label>
-            {field.options ? (
-              <select
-                id={field.name}
-                name={field.name}
-                value={values[field.name] || ""}
-                onChange={handleChange}
-                style={{
-                  padding: "0.7em 1em",
-                  borderRadius: 10,
-                  border: "1px solid #EEE",
-                  width: "100%",
-                }}
-              >
-                <option value="">Select {field.label.toLowerCase()}</option>
-                {field.options.map((opt) => (
-                  <option key={opt} value={opt}>
-                    {opt}
-                  </option>
-                ))}
-              </select>
-            ) : (
-              <input
-                id={field.name}
-                name={field.name}
-                type={field.type || "text"}
-                value={values[field.name] || ""}
-                onChange={handleChange}
-                placeholder={field.placeholder}
-                style={{
-                  padding: "0.7em 1em",
-                  borderRadius: 10,
-                  border: "1px solid #EEE",
-                  width: "100%",
-                }}
-              />
-            )}
-          </div>
-        ))}
-        <div>
-          <label htmlFor="paymentMethod" style={{ fontWeight: 600 }}>
-            Payment Method
-          </label>
-          <select
-            id="paymentMethod"
-            name="paymentMethod"
-            value={values.paymentMethod || ""}
-            onChange={handleChange}
-            style={{
-              padding: "0.7em 1em",
-              borderRadius: 10,
-              border: "1px solid #EEE",
-              width: "100%",
-            }}
-          >
-            <option value="">Select payment method</option>
-            {paymentOptions.map((opt) => (
-              <option key={opt} value={opt}>
-                {paymentIcons[opt] ? `${paymentIcons[opt]} ` : ""}
-                {opt}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <input
-            type="checkbox"
-            id="terms"
-            checked={termsAccepted}
-            onChange={(e) => setTermsAccepted(e.target.checked)}
-            style={{ width: 18, height: 18 }}
-          />
-          <label htmlFor="terms" style={{ fontSize: 15 }}>
-            I agree to the{" "}
-            <Link to="/terms" target="_blank" rel="noopener noreferrer">
-              Terms and Conditions
-            </Link>
-          </label>
-        </div>
-        {error && <div style={{ color: "#d32f2f", fontSize: 15 }}>{error}</div>}
-        <button type="submit" style={{ marginTop: 8 }}>
-          {submitLabel}
-        </button>
-        {success && (
-          <div style={{ color: "#388e3c", marginTop: 8 }}>Submitted!</div>
-        )}
-      </form>
-      {showPaymentModal && modalPaymentMethod && (
-        <ModalOverlay>
-          <ModalCard>
-            <div style={{ fontSize: 18, fontWeight: 600, marginBottom: 8 }}>
-              Payment Instructions
+    return (
+      <>
+        <form
+          ref={formRef}
+          onSubmit={handleSubmit}
+          style={{ display: "flex", flexDirection: "column", gap: 16 }}
+        >
+          {fields.map((field) => (
+            <div key={field.name}>
+              <label htmlFor={field.name} style={{ fontWeight: 600 }}>
+                {field.label}
+              </label>
+              {field.options ? (
+                <select
+                  id={field.name}
+                  name={field.name}
+                  value={values[field.name] || ""}
+                  onChange={handleChange}
+                  style={{
+                    padding: "0.7em 1em",
+                    borderRadius: 10,
+                    border: "1px solid #EEE",
+                    width: "100%",
+                  }}
+                >
+                  <option value="">Select {field.label.toLowerCase()}</option>
+                  {field.options.map((opt) => (
+                    <option key={opt} value={opt}>
+                      {opt}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <input
+                  id={field.name}
+                  name={field.name}
+                  type={field.type || "text"}
+                  value={values[field.name] || ""}
+                  onChange={handleChange}
+                  placeholder={field.placeholder}
+                  style={{
+                    padding: "0.7em 1em",
+                    borderRadius: 10,
+                    border: "1px solid #EEE",
+                    width: "100%",
+                  }}
+                />
+              )}
             </div>
-            {paymentInstructions[modalPaymentMethod]}
-            <ModalButton onClick={handleCloseModal}>Continue</ModalButton>
-          </ModalCard>
-        </ModalOverlay>
-      )}
-    </>
-  );
-};
+          ))}
+          <div>
+            <label htmlFor="paymentMethod" style={{ fontWeight: 600 }}>
+              Payment Method
+            </label>
+            <select
+              id="paymentMethod"
+              name="paymentMethod"
+              value={values.paymentMethod || ""}
+              onChange={handleChange}
+              style={{
+                padding: "0.7em 1em",
+                borderRadius: 10,
+                border: "1px solid #EEE",
+                width: "100%",
+              }}
+            >
+              <option value="">Select payment method</option>
+              {paymentOptions.map((opt) => (
+                <option key={opt} value={opt}>
+                  {paymentIcons[opt] ? `${paymentIcons[opt]} ` : ""}
+                  {opt}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <input
+              type="checkbox"
+              id="terms"
+              checked={termsAccepted}
+              onChange={(e) => setTermsAccepted(e.target.checked)}
+              style={{ width: 18, height: 18 }}
+            />
+            <label htmlFor="terms" style={{ fontSize: 15 }}>
+              I agree to the{" "}
+              <Link to="/terms" target="_blank" rel="noopener noreferrer">
+                Terms and Conditions
+              </Link>
+            </label>
+          </div>
+          {error && (
+            <div style={{ color: "#d32f2f", fontSize: 15 }}>{error}</div>
+          )}
+          <button type="submit" style={{ marginTop: 8 }}>
+            {submitLabel}
+          </button>
+          {success && (
+            <div style={{ color: "#388e3c", marginTop: 8 }}>Submitted!</div>
+          )}
+        </form>
+        {showPaymentModal && modalPaymentMethod && (
+          <ModalOverlay>
+            <ModalCard>
+              <div style={{ fontSize: 18, fontWeight: 600, marginBottom: 8 }}>
+                Payment Instructions
+              </div>
+              {paymentInstructions[modalPaymentMethod]}
+              <ModalButton onClick={handleCloseModal}>Continue</ModalButton>
+            </ModalCard>
+          </ModalOverlay>
+        )}
+      </>
+    );
+  }
+);
 
 export default ServiceForm;

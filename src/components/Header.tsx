@@ -332,9 +332,7 @@ const Header: React.FC = () => {
                     as="button"
                     to="#"
                     onClick={() => {
-                      localStorage.removeItem("token");
-                      if (auth?.setUser) auth.setUser(null);
-                      navigate("/login");
+                      handleLogout();
                       setSidebarOpen(false);
                     }}
                     style={{

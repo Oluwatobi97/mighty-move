@@ -8,44 +8,63 @@ import BookingCard from "../components/BookingCard";
 import StatsCard from "../components/StatsCard";
 
 const Container = styled(motion.div)`
-  padding: 2rem;
-  max-width: 1200px;
+  padding: 2.5rem 1rem 2rem 1rem;
+  max-width: 1000px;
   margin: 0 auto;
-  @media (max-width: 768px) {
-    padding: 1rem;
+`;
+
+const MainCard = styled(motion.section)`
+  background: #fffde7;
+  border-radius: 24px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+  padding: 2.5rem 2rem;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  @media (max-width: 700px) {
+    padding: 1.2rem 0.5rem;
+    gap: 1.2rem;
   }
 `;
 
-const Header = styled(motion.div)`
-  text-align: center;
-  margin-bottom: 2.5rem;
-`;
-
-const Title = styled.h1`
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #1a202c;
-`;
-
-const MainGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
+const TopPanelsWrapper = styled.div`
+  display: flex;
   gap: 2rem;
+  justify-content: center;
+  @media (max-width: 900px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+  }
 `;
 
-const Section = styled(motion.section)`
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 2rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+const PanelCard = styled.div`
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 8px 0 rgba(31, 38, 135, 0.08);
+  padding: 1.5rem 1.2rem;
+  max-width: 400px;
+  min-width: 260px;
+  width: 100%;
+  @media (max-width: 700px) {
+    padding: 1.2rem 0.5rem;
+    margin-bottom: 1.2rem;
+    min-width: 0;
+  }
 `;
 
-const SectionTitle = styled.h2`
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
-  color: #2d3748;
+const SectionTitle = styled.h3`
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #111;
+`;
+
+const Title = styled.h2`
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
 `;
 
 const StatsGrid = styled.div`
@@ -167,27 +186,31 @@ const AdminDashboard: React.FC = () => {
 
   return (
     <Container
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
     >
-      <Header>
+      <MainCard
+        initial={{ scale: 0.98, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.3, delay: 0.1 }}
+      >
         <Title>Admin Dashboard</Title>
-      </Header>
 
-      <MainGrid>
-        <Section>
-          <SectionTitle>Key Statistics</SectionTitle>
-          <StatsGrid>
-            <StatsCard label="Total Bookings" value={stats.total} />
-            <StatsCard label="Pending Approval" value={stats.pending} />
-            <StatsCard label="In Progress" value={stats.inProgress} />
-            <StatsCard label="Completed" value={stats.completed} />
-          </StatsGrid>
-        </Section>
+        <TopPanelsWrapper>
+          <PanelCard>
+            <SectionTitle>Key Statistics</SectionTitle>
+            <StatsGrid>
+              <StatsCard label="Total Bookings" value={stats.total} />
+              <StatsCard label="Pending Approval" value={stats.pending} />
+              <StatsCard label="In Progress" value={stats.inProgress} />
+              <StatsCard label="Completed" value={stats.completed} />
+            </StatsGrid>
+          </PanelCard>
+        </TopPanelsWrapper>
 
         {pendingBookings.length > 0 && (
-          <Section>
+          <div>
             <SectionTitle>
               Pending Approval ({pendingBookings.length})
             </SectionTitle>
@@ -204,10 +227,10 @@ const AdminDashboard: React.FC = () => {
                 </div>
               ))}
             </BookingsGrid>
-          </Section>
+          </div>
         )}
 
-        <Section>
+        <div>
           <SectionTitle>
             All Other Bookings ({otherBookings.length})
           </SectionTitle>
@@ -220,8 +243,8 @@ const AdminDashboard: React.FC = () => {
           ) : (
             <EmptyState>No other bookings found.</EmptyState>
           )}
-        </Section>
-      </MainGrid>
+        </div>
+      </MainCard>
     </Container>
   );
 };
