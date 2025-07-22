@@ -93,6 +93,7 @@ const WasteBookingForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("WasteBookingForm: handleSubmit fired", form);
     if (!form.wasteType || !form.address || !form.frequency) {
       setError("Please fill in all fields.");
       return;

@@ -68,6 +68,7 @@ const LogisticsBooking: React.FC = () => {
   const formRef = useRef<any>(null);
   const navigate = useNavigate();
   const handleSubmit = async (values: Record<string, string>) => {
+    console.log("LogisticsBooking: handleSubmit fired", values);
     try {
       const token = localStorage.getItem("token");
       if (!token) throw new (window as any).Error("Not authenticated");

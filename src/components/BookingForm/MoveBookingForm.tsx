@@ -87,6 +87,7 @@ const MoveBookingForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("MoveBookingForm: handleSubmit fired", form);
     if (!form.pickup || !form.dropoff || !form.vehicle || !form.datetime) {
       setError("Please fill in all fields.");
       return;
