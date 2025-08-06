@@ -22,36 +22,6 @@ const MainCard = styled(motion.section)`
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  @media (max-width: 700px) {
-    padding: 1.2rem 0.5rem;
-    gap: 1.2rem;
-  }
-`;
-
-const TopPanelsWrapper = styled.div`
-  display: flex;
-  gap: 2rem;
-  justify-content: center;
-  @media (max-width: 900px) {
-    flex-direction: column;
-    align-items: center;
-    gap: 1.2rem;
-  }
-`;
-
-const PanelCard = styled.div`
-  background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 2px 8px 0 rgba(31, 38, 135, 0.08);
-  padding: 1.5rem 1.2rem;
-  max-width: 400px;
-  min-width: 260px;
-  width: 100%;
-  @media (max-width: 700px) {
-    padding: 1.2rem 0.5rem;
-    margin-bottom: 1.2rem;
-    min-width: 0;
-  }
 `;
 
 const SectionTitle = styled.h3`
@@ -77,6 +47,13 @@ const BookingsGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 1.5rem;
+`;
+
+const Input = styled.input`
+  margin: 0.5rem 0.5rem 0 0;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
 `;
 
 const ControlButton = styled.button`
@@ -128,11 +105,11 @@ const AdminDashboard: React.FC = () => {
   const [bookings, setBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [approving, setApproving] = useState<number | null>(null);
+  const [locationInputs, setLocationInputs] = useState<any>({});
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      setLoading(true);
       getAllBookings(token)
         .then((data) => {
           setBookings(data);
@@ -147,10 +124,7 @@ const AdminDashboard: React.FC = () => {
 
   const handleApproveBooking = async (bookingId: number) => {
     const token = localStorage.getItem("token");
-    if (!token) {
-      toast.error("Authentication error.");
-      return;
-    }
+    if (!token) return toast.error("Authentication error.");
 
     setApproving(bookingId);
     try {
@@ -159,63 +133,72 @@ const AdminDashboard: React.FC = () => {
         prev.map((b) => (b.id === bookingId ? updatedBooking : b))
       );
       toast.success(`Booking #${bookingId} approved!`);
-    } catch (error) {
+    } catch {
       toast.error("Failed to approve booking.");
     } finally {
       setApproving(null);
     }
   };
 
-  if (loading) {
+  const handleUpdateLocation = async (
+    trackingId: string,
+    lat: number,
+    lng: number
+  ) => {
+    const token = localStorage.getItem("token");
+    if (!token) return toast.error("Authentication error.");
+
+    try {
+      const res = await fetch(`/api/bookings/location/${trackingId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ lat, lng }),
+      });
+      if (!res.ok) throw new Error("Location update failed");
+      toast.success("Location updated successfully.");
+    } catch {
+      toast.error("Failed to update location.");
+    }
+  };
+
+  if (loading)
     return (
       <Container>
         <Spinner />
       </Container>
     );
-  }
 
-  const pendingBookings = bookings.filter((b) => b.status === "Pending");
-  const otherBookings = bookings.filter((b) => b.status !== "Pending");
+  const pending = bookings.filter((b) => b.status === "Pending");
+  const others = bookings.filter((b) => b.status !== "Pending");
 
   const stats = {
     total: bookings.length,
-    pending: pendingBookings.length,
+    pending: pending.length,
     inProgress: bookings.filter((b) => b.status === "In Progress").length,
     completed: bookings.filter((b) => b.status === "Completed").length,
   };
 
   return (
-    <Container
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-    >
-      <MainCard
-        initial={{ scale: 0.98, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.3, delay: 0.1 }}
-      >
+    <Container>
+      <MainCard>
         <Title>Admin Dashboard</Title>
 
-        <TopPanelsWrapper>
-          <PanelCard>
-            <SectionTitle>Key Statistics</SectionTitle>
-            <StatsGrid>
-              <StatsCard label="Total Bookings" value={stats.total} />
-              <StatsCard label="Pending Approval" value={stats.pending} />
-              <StatsCard label="In Progress" value={stats.inProgress} />
-              <StatsCard label="Completed" value={stats.completed} />
-            </StatsGrid>
-          </PanelCard>
-        </TopPanelsWrapper>
+        <SectionTitle>Statistics</SectionTitle>
+        <StatsGrid>
+          <StatsCard label="Total Bookings" value={stats.total} />
+          <StatsCard label="Pending" value={stats.pending} />
+          <StatsCard label="In Progress" value={stats.inProgress} />
+          <StatsCard label="Completed" value={stats.completed} />
+        </StatsGrid>
 
-        {pendingBookings.length > 0 && (
-          <div>
-            <SectionTitle>
-              Pending Approval ({pendingBookings.length})
-            </SectionTitle>
+        {pending.length > 0 && (
+          <>
+            <SectionTitle>Pending Bookings</SectionTitle>
             <BookingsGrid>
-              {pendingBookings.map((booking) => (
+              {pending.map((booking) => (
                 <div key={booking.id}>
                   <BookingCard {...booking} isAdmin={true} />
                   <ControlButton
@@ -227,23 +210,62 @@ const AdminDashboard: React.FC = () => {
                 </div>
               ))}
             </BookingsGrid>
-          </div>
+          </>
         )}
 
-        <div>
-          <SectionTitle>
-            All Other Bookings ({otherBookings.length})
-          </SectionTitle>
-          {otherBookings.length > 0 ? (
-            <BookingsGrid>
-              {otherBookings.map((booking) => (
-                <BookingCard key={booking.id} {...booking} isAdmin={true} />
-              ))}
-            </BookingsGrid>
-          ) : (
-            <EmptyState>No other bookings found.</EmptyState>
-          )}
-        </div>
+        <SectionTitle>Other Bookings</SectionTitle>
+        {others.length > 0 ? (
+          <BookingsGrid>
+            {others.map((booking) => (
+              <div key={booking.id}>
+                <BookingCard {...booking} isAdmin={true} />
+                {booking.status === "In Progress" && (
+                  <div>
+                    <Input
+                      type="number"
+                      placeholder="Latitude"
+                      onChange={(e) =>
+                        setLocationInputs((prev: any) => ({
+                          ...prev,
+                          [booking.tracking_id]: {
+                            ...prev[booking.tracking_id],
+                            lat: parseFloat(e.target.value),
+                          },
+                        }))
+                      }
+                    />
+                    <Input
+                      type="number"
+                      placeholder="Longitude"
+                      onChange={(e) =>
+                        setLocationInputs((prev: any) => ({
+                          ...prev,
+                          [booking.tracking_id]: {
+                            ...prev[booking.tracking_id],
+                            lng: parseFloat(e.target.value),
+                          },
+                        }))
+                      }
+                    />
+                    <ControlButton
+                      onClick={() =>
+                        handleUpdateLocation(
+                          booking.tracking_id,
+                          locationInputs[booking.tracking_id]?.lat,
+                          locationInputs[booking.tracking_id]?.lng
+                        )
+                      }
+                    >
+                      Update Location
+                    </ControlButton>
+                  </div>
+                )}
+              </div>
+            ))}
+          </BookingsGrid>
+        ) : (
+          <EmptyState>No other bookings found.</EmptyState>
+        )}
       </MainCard>
     </Container>
   );
