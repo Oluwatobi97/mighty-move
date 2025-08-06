@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import ServiceForm from "../components/ServiceForm";
-import { mockBookService } from "../utils/api";
+import { createBooking } from "../utils/api"; // ✅ Using real API
 import { toast } from "react-toastify";
 
 const Container = styled(motion.div)`
@@ -47,16 +47,56 @@ const fields = [
     label: "Vehicle Type",
     options: ["Small Van", "Medium Truck", "Large Truck", "Specialty Vehicle"],
   },
-  { name: "datetime", label: "Preferred Date & Time", type: "datetime-local" },
+  {
+    name: "datetime",
+    label: "Preferred Date & Time",
+    type: "datetime-local",
+  },
 ];
 
 const MoveBooking: React.FC = () => {
   const formRef = useRef<any>(null);
+
   const handleSubmit = async (values: Record<string, string>) => {
-    await mockBookService(values);
-    toast.success("Move booking submitted!");
-    if (formRef.current && formRef.current.reset) formRef.current.reset();
+    try {
+      const token = localStorage.getItem("token"); // Get auth token
+
+      // Set dynamic price based on vehicle type
+      const priceMap: Record<string, number> = {
+        "Small Van": 100,
+        "Medium Truck": 150,
+        "Large Truck": 200,
+        "Specialty Vehicle": 250,
+      };
+
+      const price = priceMap[values.vehicle] || 150;
+
+      // Prepare data for backend
+      const data = {
+        service_type: values.vehicle,
+        address: `${values.pickup} to ${values.dropoff}`,
+        date: values.datetime,
+        price: price,
+        details: {
+          pickup: values.pickup,
+          dropoff: values.dropoff,
+          vehicle: values.vehicle,
+          datetime: values.datetime,
+        },
+      };
+
+      await createBooking(data, token || "");
+      toast.success("Move booking submitted!");
+
+      if (formRef.current && formRef.current.reset) {
+        formRef.current.reset();
+      }
+    } catch (err) {
+      console.error("Booking error:", err);
+      toast.error("Failed to submit booking.");
+    }
   };
+
   return (
     <Container
       initial={{ opacity: 0, y: 30 }}
@@ -77,6 +117,7 @@ const MoveBooking: React.FC = () => {
         </ArticleText>
       </Card>
       <ServiceForm
+        ref={formRef}
         fields={fields}
         onSubmit={handleSubmit}
         submitLabel="Book Move"
