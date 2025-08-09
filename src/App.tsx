@@ -7,7 +7,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import MoveBooking from "./pages/MoveBooking";
 import WasteBooking from "./pages/WasteBooking";
-import LogisticsBooking from "./pages/LogisticsBooking";
+import LogisticsBooking from "./components/BookingForm/LogisticsBooking";
 import TrackBooking from "./pages/TrackBooking";
 import UserDashboard from "./pages/UserDashboard";
 import AdminDashboard from "./pages/AdminDashboard";

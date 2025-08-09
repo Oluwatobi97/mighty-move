@@ -1,8 +1,8 @@
 import React, { useRef } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import ServiceForm from "../components/ServiceForm";
-import { createBooking } from "../utils/api";
+import ServiceForm from "../ServiceForm";
+import { createBooking } from "../../utils/api";
 import { useNavigate } from "react-router-dom";
 
 const Container = styled(motion.div)`
@@ -62,34 +62,47 @@ const fields = [
     label: "Delivery Type",
     options: ["Standard", "Express"],
   },
+  {
+    name: "pickupDate",
+    label: "Pickup Date & Time",
+    type: "datetime-local",
+  },
 ];
 
 const LogisticsBooking: React.FC = () => {
   const formRef = useRef<any>(null);
   const navigate = useNavigate();
+
   const handleSubmit = async (values: Record<string, string>) => {
-    console.log("LogisticsBooking: handleSubmit fired", values);
+    console.log("LogisticsBooking submitted:", values);
+
     try {
       const token = localStorage.getItem("token");
-      if (!token) throw new (window as any).Error("Not authenticated");
+      if (!token) throw new Error("Not authenticated");
+
       await createBooking(
         {
           service_type: "Logistics",
           address: `${values.sender} to ${values.receiver}`,
-          date: new Date().toISOString(), // You can update this to use a real date field
-          price: 0, // Add price logic if needed
+          date: values.pickupDate,
+          price: 0, // Add pricing logic if you want
           package: values.package,
           delivery_type: values.deliveryType,
         },
         token
       );
+
+      // Navigate to home or bookings page
       navigate("/home");
     } catch (err: any) {
-      // You can show a toast or error message here
       alert(err.message || "Booking failed. Try again.");
     }
-    if (formRef.current && formRef.current.reset) formRef.current.reset();
+
+    if (formRef.current && formRef.current.reset) {
+      formRef.current.reset();
+    }
   };
+
   return (
     <Container
       initial={{ opacity: 0, y: 30 }}
@@ -108,12 +121,14 @@ const LogisticsBooking: React.FC = () => {
           Track your shipment every step of the way.
         </ArticleText>
       </Card>
+
       <ServiceForm
         ref={formRef}
         fields={fields}
         onSubmit={handleSubmit}
         submitLabel="Send Package"
       />
+
       <PaymentSection>
         <b>Payment Methods:</b>
         <br />
