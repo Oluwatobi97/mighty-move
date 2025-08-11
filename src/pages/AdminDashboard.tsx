@@ -112,7 +112,15 @@ const AdminDashboard: React.FC = () => {
     if (token) {
       getAllBookings(token)
         .then((data) => {
-          setBookings(data);
+          // Parse details if they're stored as JSON strings
+          const parsedData = data.map((booking: any) => ({
+            ...booking,
+            details:
+              typeof booking.details === "string"
+                ? JSON.parse(booking.details)
+                : booking.details,
+          }));
+          setBookings(parsedData);
           setLoading(false);
         })
         .catch(() => {
@@ -200,7 +208,12 @@ const AdminDashboard: React.FC = () => {
             <BookingsGrid>
               {pending.map((booking) => (
                 <div key={booking.id}>
-                  <BookingCard {...booking} isAdmin={true} />
+                  <BookingCard
+                    {...booking}
+                    id={booking.id}
+                    details={booking.details}
+                    isAdmin={true}
+                  />
                   <ControlButton
                     onClick={() => handleApproveBooking(booking.id)}
                     disabled={approving === booking.id}
@@ -218,7 +231,12 @@ const AdminDashboard: React.FC = () => {
           <BookingsGrid>
             {others.map((booking) => (
               <div key={booking.id}>
-                <BookingCard {...booking} isAdmin={true} />
+                <BookingCard
+                  {...booking}
+                  id={booking.id}
+                  details={booking.details}
+                  isAdmin={true}
+                />
                 {booking.status === "In Progress" && (
                   <div>
                     <Input

@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
 
 const Container = styled(motion.div)`
@@ -179,6 +180,17 @@ const Spinner = styled.div`
   }
 `;
 
+const TrackingIdDisplay = styled.div`
+  background: #e3f2fd;
+  color: #1976d2;
+  padding: 1rem;
+  border-radius: 10px;
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+`;
+
 const TrackBooking: React.FC = () => {
   const [trackingId, setTrackingId] = useState("");
   const [location, setLocation] = useState<{ lat: number; lng: number } | null>(
@@ -186,11 +198,21 @@ const TrackBooking: React.FC = () => {
   );
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const locationHook = useLocation();
 
-  const handleTrack = async (e: React.FormEvent) => {
-    e.preventDefault();
+  useEffect(() => {
+    // Check if tracking ID is provided in URL query parameters
+    const urlParams = new URLSearchParams(locationHook.search);
+    const trackingIdParam = urlParams.get("trackingId");
 
-    if (!trackingId.trim()) {
+    if (trackingIdParam) {
+      setTrackingId(trackingIdParam);
+      handleTrackWithId(trackingIdParam);
+    }
+  }, [locationHook.search]);
+
+  const handleTrackWithId = async (id: string) => {
+    if (!id.trim()) {
       setError("Please enter a tracking ID.");
       return;
     }
@@ -203,7 +225,7 @@ const TrackBooking: React.FC = () => {
       const response = await axios.get(
         `${
           import.meta.env.VITE_API_URL || "http://localhost:5000"
-        }/bookings/track/${trackingId}`
+        }/bookings/track/${id}`
       );
 
       if (response.data.location) {
@@ -217,6 +239,11 @@ const TrackBooking: React.FC = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleTrack = async (e: React.FormEvent) => {
+    e.preventDefault();
+    handleTrackWithId(trackingId);
   };
 
   return (
@@ -271,6 +298,9 @@ const TrackBooking: React.FC = () => {
             transition={{ duration: 0.5 }}
           >
             <LocationTitle>Current Location</LocationTitle>
+            {trackingId && (
+              <TrackingIdDisplay>Tracking ID: {trackingId}</TrackingIdDisplay>
+            )}
             <MapPlaceholder>Map visualization would appear here</MapPlaceholder>
             <LocationInfo>
               <LocationItem>

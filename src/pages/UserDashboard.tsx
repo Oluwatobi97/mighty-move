@@ -160,7 +160,15 @@ const UserDashboard: React.FC = () => {
       setLoading(true);
       getUserBookings(token)
         .then((data: any) => {
-          setBookings(data);
+          // Parse details if they're stored as JSON strings
+          const parsedData = data.map((booking: any) => ({
+            ...booking,
+            details:
+              typeof booking.details === "string"
+                ? JSON.parse(booking.details)
+                : booking.details,
+          }));
+          setBookings(parsedData);
           setLoading(false);
         })
         .catch(() => {
@@ -236,7 +244,12 @@ const UserDashboard: React.FC = () => {
         ) : (
           <BookingsList>
             {ongoingBookings.map((b, i) => (
-              <BookingCard key={i} {...b} />
+              <BookingCard
+                key={b.id || i}
+                id={b.id}
+                details={b.details}
+                {...b}
+              />
             ))}
           </BookingsList>
         )}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import StatusBadge from "./StatusBadge";
@@ -15,6 +15,8 @@ export type BookingCardProps = {
   notes?: string;
   isAdmin?: boolean;
   trackingNumber?: string;
+  id?: number;
+  details?: any;
 };
 
 const Card = styled(motion.div)`
@@ -28,6 +30,14 @@ const Card = styled(motion.div)`
   gap: 0.7rem;
   min-width: 220px;
   max-width: 400px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.15);
+  }
+
   @media (max-width: 600px) {
     padding: 1rem 0.5rem;
     max-width: 98vw;
@@ -92,6 +102,108 @@ const NotesText = styled.div`
   margin-top: 0.5rem;
 `;
 
+const TrackingLink = styled.div`
+  background: #e3f2fd;
+  color: #1976d2;
+  padding: 0.5rem;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+`;
+
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+`;
+
+const ModalContent = styled.div`
+  background: #fff;
+  border-radius: 18px;
+  padding: 2rem;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+  position: relative;
+
+  @media (max-width: 600px) {
+    padding: 1.5rem;
+  }
+`;
+
+const ModalTitle = styled.h2`
+  margin-top: 0;
+  color: #111;
+  font-size: 1.5rem;
+`;
+
+const CloseButton = styled.button`
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #888;
+`;
+
+const DetailGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 1rem 0;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const DetailItem = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const DetailHeader = styled.div`
+  font-weight: 600;
+  color: #666;
+  font-size: 0.9rem;
+`;
+
+const DetailBody = styled.div`
+  font-weight: 500;
+  color: #111;
+  margin-top: 0.2rem;
+`;
+
+const TrackingButton = styled.button`
+  background: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 1rem;
+  width: 100%;
+
+  &:hover {
+    background: #1565c0;
+  }
+`;
+
 const BookingCard: React.FC<BookingCardProps> = ({
   serviceType,
   status,
@@ -104,62 +216,222 @@ const BookingCard: React.FC<BookingCardProps> = ({
   notes,
   isAdmin = false,
   trackingNumber,
-}) => (
-  <Card
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5 }}
-  >
-    <TopRow>
-      <ServiceType>{serviceType} Booking</ServiceType>
-      <StatusBadge status={status} />
-    </TopRow>
-    <DateText>Date: {date}</DateText>
-    {trackingNumber && status !== "Pending" && (
-      <DetailRow>
-        <DetailLabel>Tracking #:</DetailLabel>
-        <DetailValue>{trackingNumber}</DetailValue>
-      </DetailRow>
-    )}
-    {user && <UserText>Customer: {user}</UserText>}
+  id,
+  details,
+}) => {
+  const [showModal, setShowModal] = useState(false);
 
-    {isAdmin && (
-      <>
-        {address && (
+  const handleCardClick = () => {
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
+  const handleTrackClick = () => {
+    if (trackingNumber) {
+      // Navigate to tracking page or open in same tab
+      window.location.href = `/track?trackingId=${trackingNumber}`;
+    }
+  };
+
+  return (
+    <>
+      <Card
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        onClick={handleCardClick}
+      >
+        <TopRow>
+          <ServiceType>{serviceType} Booking</ServiceType>
+          <StatusBadge status={status} />
+        </TopRow>
+        <DateText>Date: {date}</DateText>
+        {trackingNumber && status !== "Pending" && (
           <DetailRow>
-            <DetailLabel>Address:</DetailLabel>
-            <DetailValue>{address}</DetailValue>
+            <DetailLabel>Tracking #:</DetailLabel>
+            <DetailValue>{trackingNumber}</DetailValue>
           </DetailRow>
         )}
-        {phone && (
-          <DetailRow>
-            <DetailLabel>Phone:</DetailLabel>
-            <DetailValue>{phone}</DetailValue>
-          </DetailRow>
+        {user && <UserText>Customer: {user}</UserText>}
+
+        {isAdmin && (
+          <>
+            {address && (
+              <DetailRow>
+                <DetailLabel>Address:</DetailLabel>
+                <DetailValue>{address}</DetailValue>
+              </DetailRow>
+            )}
+            {phone && (
+              <DetailRow>
+                <DetailLabel>Phone:</DetailLabel>
+                <DetailValue>{phone}</DetailValue>
+              </DetailRow>
+            )}
+            <DetailRow>
+              <DetailLabel>Worker:</DetailLabel>
+              <WorkerBadge assigned={!!assignedWorker}>
+                {assignedWorker || "Unassigned"}
+              </WorkerBadge>
+            </DetailRow>
+            {price && (
+              <DetailRow>
+                <DetailLabel>Price:</DetailLabel>
+                <DetailValue>
+                  {typeof price === "number" || !isNaN(Number(price))
+                    ? Number(price).toLocaleString("en-GB", {
+                        style: "currency",
+                        currency: "GBP",
+                      })
+                    : price}
+                </DetailValue>
+              </DetailRow>
+            )}
+            {notes && <NotesText>Notes: {notes}</NotesText>}
+          </>
         )}
-        <DetailRow>
-          <DetailLabel>Worker:</DetailLabel>
-          <WorkerBadge assigned={!!assignedWorker}>
-            {assignedWorker || "Unassigned"}
-          </WorkerBadge>
-        </DetailRow>
-        {price && (
-          <DetailRow>
-            <DetailLabel>Price:</DetailLabel>
-            <DetailValue>
-              {typeof price === "number" || !isNaN(Number(price))
-                ? Number(price).toLocaleString("en-GB", {
-                    style: "currency",
-                    currency: "GBP",
-                  })
-                : price}
-            </DetailValue>
-          </DetailRow>
+
+        {!isAdmin && trackingNumber && status !== "Pending" && (
+          <TrackingLink>Click to view tracking details</TrackingLink>
         )}
-        {notes && <NotesText>Notes: {notes}</NotesText>}
-      </>
-    )}
-  </Card>
-);
+      </Card>
+
+      {showModal && (
+        <ModalOverlay onClick={closeModal}>
+          <ModalContent onClick={(e) => e.stopPropagation()}>
+            <CloseButton onClick={closeModal}>&times;</CloseButton>
+            <ModalTitle>Booking Details</ModalTitle>
+
+            <DetailGrid>
+              <DetailItem>
+                <DetailHeader>Service Type</DetailHeader>
+                <DetailBody>{serviceType} Booking</DetailBody>
+              </DetailItem>
+              <DetailItem>
+                <DetailHeader>Status</DetailHeader>
+                <DetailBody>
+                  <StatusBadge status={status} />
+                </DetailBody>
+              </DetailItem>
+              <DetailItem>
+                <DetailHeader>Date</DetailHeader>
+                <DetailBody>{date}</DetailBody>
+              </DetailItem>
+              <DetailItem>
+                <DetailHeader>Booking ID</DetailHeader>
+                <DetailBody>#{id}</DetailBody>
+              </DetailItem>
+              {price && (
+                <DetailItem>
+                  <DetailHeader>Price</DetailHeader>
+                  <DetailBody>
+                    {typeof price === "number" || !isNaN(Number(price))
+                      ? Number(price).toLocaleString("en-GB", {
+                          style: "currency",
+                          currency: "GBP",
+                        })
+                      : price}
+                  </DetailBody>
+                </DetailItem>
+              )}
+              {trackingNumber && (
+                <DetailItem>
+                  <DetailHeader>Tracking Number</DetailHeader>
+                  <DetailBody>{trackingNumber}</DetailBody>
+                </DetailItem>
+              )}
+            </DetailGrid>
+
+            {address && (
+              <div>
+                <DetailHeader>Address</DetailHeader>
+                <DetailBody>{address}</DetailBody>
+              </div>
+            )}
+
+            {phone && (
+              <div>
+                <DetailHeader>Phone</DetailHeader>
+                <DetailBody>{phone}</DetailBody>
+              </div>
+            )}
+
+            {assignedWorker && (
+              <div>
+                <DetailHeader>Assigned Worker</DetailHeader>
+                <DetailBody>{assignedWorker}</DetailBody>
+              </div>
+            )}
+
+            {notes && (
+              <div>
+                <DetailHeader>Notes</DetailHeader>
+                <DetailBody>{notes}</DetailBody>
+              </div>
+            )}
+
+            {details && (
+              <div>
+                <DetailHeader>Service Details</DetailHeader>
+                <DetailBody>
+                  {serviceType === "Logistics" && (
+                    <div>
+                      <div>
+                        <strong>Sender:</strong> {details.sender}
+                      </div>
+                      <div>
+                        <strong>Receiver:</strong> {details.receiver}
+                      </div>
+                      <div>
+                        <strong>Package:</strong> {details.package}
+                      </div>
+                      <div>
+                        <strong>Delivery Type:</strong> {details.delivery_type}
+                      </div>
+                    </div>
+                  )}
+                  {serviceType === "Waste" && (
+                    <div>
+                      <div>
+                        <strong>Waste Type:</strong> {details.waste_type}
+                      </div>
+                      <div>
+                        <strong>Frequency:</strong> {details.frequency}
+                      </div>
+                    </div>
+                  )}
+                  {serviceType.includes("Van") ||
+                  serviceType.includes("Truck") ||
+                  serviceType.includes("Vehicle") ? (
+                    <div>
+                      <div>
+                        <strong>Pickup:</strong> {details.pickup}
+                      </div>
+                      <div>
+                        <strong>Drop-off:</strong> {details.dropoff}
+                      </div>
+                      <div>
+                        <strong>Vehicle:</strong> {details.vehicle}
+                      </div>
+                    </div>
+                  ) : null}
+                </DetailBody>
+              </div>
+            )}
+
+            {trackingNumber && status !== "Pending" && (
+              <TrackingButton onClick={handleTrackClick}>
+                Track This Booking
+              </TrackingButton>
+            )}
+          </ModalContent>
+        </ModalOverlay>
+      )}
+    </>
+  );
+};
 
 export default BookingCard;
