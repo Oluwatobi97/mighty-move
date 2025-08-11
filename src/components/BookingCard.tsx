@@ -373,7 +373,7 @@ const BookingCard: React.FC<BookingCardProps> = ({
               </div>
             )}
 
-            {details && (
+            {details && serviceType && (
               <div>
                 <DetailHeader>Service Details</DetailHeader>
                 <DetailBody>
@@ -403,9 +403,10 @@ const BookingCard: React.FC<BookingCardProps> = ({
                       </div>
                     </div>
                   )}
-                  {serviceType.includes("Van") ||
-                  serviceType.includes("Truck") ||
-                  serviceType.includes("Vehicle") ? (
+                  {serviceType.includes &&
+                  (serviceType.includes("Van") ||
+                    serviceType.includes("Truck") ||
+                    serviceType.includes("Vehicle")) ? (
                     <div>
                       <div>
                         <strong>Pickup:</strong> {details.pickup}

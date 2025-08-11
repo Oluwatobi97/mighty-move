@@ -1,29 +1,61 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
+:root {
+  --background-color: #FFFFFF;
+  --text-color: #111111;
+  --card-background: #FFFDE7;
+  --accent-color: #FFF9C4;
+  --border-color: #e0e0e0;
+  --shadow-color: rgba(31, 38, 135, 0.10);
+  --primary-color: #111111;
+  --secondary-color: #444444;
+  --success-color: #4caf50;
+  --error-color: #f44336;
+  --warning-color: #ff9800;
+  --info-color: #2196f3;
+}
+
+body.dark-mode {
+  --background-color: #121212;
+  --text-color: #FFFFFF;
+  --card-background: #1E1E1E;
+  --accent-color: #F57F17;
+  --border-color: #444444;
+  --shadow-color: rgba(0, 0, 0, 0.30);
+  --primary-color: #FFFFFF;
+  --secondary-color: #BBBBBB;
+  --success-color: #66bb6a;
+  --error-color: #ef5350;
+  --warning-color: #ffa726;
+  --info-color: #42a5f5;
+}
+
 body, html {
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  background: #FFFFFF;
-  color: #111111;
+  background: var(--background-color);
+  color: var(--text-color);
   font-family: 'Poppins', Inter, Roboto, Arial, sans-serif;
   font-size: 16px;
   box-sizing: border-box;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Poppins', Inter, Roboto, Arial, sans-serif;
-  color: #111111;
+  color: var(--text-color);
   margin-top: 0;
 }
 
 a {
-  color: #111111;
+  color: var(--primary-color);
   text-decoration: none;
   transition: color 0.2s;
 }
+
 a:hover {
-  color: #FFD600;
+  color: var(--accent-color);
 }
 
 button {
@@ -31,15 +63,42 @@ button {
   font-size: 1rem;
   border-radius: 18px;
   border: none;
-  background: #FFF9C4;
-  color: #111111;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10);
+  background: var(--accent-color);
+  color: var(--primary-color);
+  box-shadow: 0 8px 32px 0 var(--shadow-color);
   padding: 0.75em 2em;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
 }
+
 button:hover {
   transform: translateY(-4px) scale(1.04);
   box-shadow: 0 16px 40px 0 rgba(31, 38, 135, 0.18);
-  background: #FFF176;
+  background: var(--accent-color);
+  opacity: 0.9;
+}
+
+input, select, textarea {
+  background: var(--card-background);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  transition: background 0.3s, color 0.3s, border 0.3s;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--card-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-color);
 }

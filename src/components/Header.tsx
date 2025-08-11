@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import { useTheme } from "../context/ThemeContext";
 
 const HeaderBar = styled(motion.header)`
   background: #fff9c4;
@@ -15,6 +16,12 @@ const HeaderBar = styled(motion.header)`
   justify-content: space-between;
   position: relative;
   min-height: 64px;
+
+  // Dark mode styles
+  body.dark-mode & {
+    background: #1e1e1e;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  }
 `;
 
 const LogoLink = styled(Link)`
@@ -30,6 +37,11 @@ const LogoImg = styled.img`
   box-shadow: 0 2px 8px #fffde7;
   @media (max-width: 600px) {
     height: 28px;
+  }
+
+  // Dark mode styles
+  body.dark-mode & {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   }
 `;
 
@@ -50,10 +62,22 @@ const NavLink = styled(Link)`
   border-radius: 12px;
   transition: background 0.2s, transform 0.2s;
   white-space: nowrap;
+  text-decoration: none;
+
   &:hover {
     background: #fff176;
     transform: translateY(-2px) scale(1.05);
     box-shadow: 0 4px 16px 0 rgba(31, 38, 135, 0.1);
+  }
+
+  // Dark mode styles
+  body.dark-mode & {
+    color: #ffffff;
+
+    &:hover {
+      background: #f57f17;
+      box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.3);
+    }
   }
 `;
 
@@ -89,6 +113,11 @@ const Bar = styled.div`
   background: #111;
   margin: 2px 0;
   border-radius: 2px;
+
+  // Dark mode styles
+  body.dark-mode & {
+    background: #ffffff;
+  }
 `;
 
 const SidebarOverlay = styled(motion.div)`
@@ -117,6 +146,12 @@ const Sidebar = styled(motion.aside)`
   @media (min-width: 901px) {
     display: none;
   }
+
+  // Dark mode styles
+  body.dark-mode & {
+    background: #1e1e1e;
+    box-shadow: -8px 0 32px 0 rgba(0, 0, 0, 0.3);
+  }
 `;
 
 const CloseButton = styled.button`
@@ -133,6 +168,11 @@ const CloseButton = styled.button`
   cursor: pointer;
   margin-bottom: 2rem;
   padding: 0;
+
+  // Dark mode styles
+  body.dark-mode & {
+    color: #ffffff;
+  }
 `;
 
 const SidebarNav = styled.nav`
@@ -148,10 +188,51 @@ const SidebarNavLink = styled(Link)`
   padding: 0.7em 1.2em;
   border-radius: 12px;
   transition: background 0.2s, transform 0.2s;
+  text-decoration: none;
+
   &:hover {
     background: #fff176;
     transform: scale(1.04);
     box-shadow: 0 4px 16px 0 rgba(31, 38, 135, 0.1);
+  }
+
+  // Dark mode styles
+  body.dark-mode & {
+    color: #ffffff;
+
+    &:hover {
+      background: #f57f17;
+      box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.3);
+    }
+  }
+`;
+
+const ThemeToggle = styled.button`
+  background: #111;
+  color: #fff9c4;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.2rem;
+  margin-left: 1rem;
+
+  &:hover {
+    background: #333;
+  }
+
+  // Dark mode styles
+  body.dark-mode & {
+    background: #f57f17;
+    color: #121212;
+
+    &:hover {
+      background: #ff9800;
+    }
   }
 `;
 
@@ -159,6 +240,7 @@ const Header: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
+  const { isDarkMode, toggleTheme } = useTheme();
 
   // Navigation links for authenticated users
   const navLinks = [
@@ -252,6 +334,9 @@ const Header: React.FC = () => {
             Log Out
           </NavLink>
         )}
+        <ThemeToggle onClick={toggleTheme}>
+          {isDarkMode ? "☀️" : "🌙"}
+        </ThemeToggle>
       </Nav>
       <MenuButton aria-label="Open menu" onClick={() => setSidebarOpen(true)}>
         <Hamburger>
@@ -350,6 +435,30 @@ const Header: React.FC = () => {
                     Log Out
                   </SidebarNavLink>
                 )}
+                <SidebarNavLink
+                  as="button"
+                  to="#"
+                  onClick={() => {
+                    toggleTheme();
+                    setSidebarOpen(false);
+                  }}
+                  style={{
+                    background: isDarkMode ? "#f57f17" : "#111",
+                    color: isDarkMode ? "#121212" : "#fff9c4",
+                    fontWeight: 700,
+                    marginLeft: "1rem",
+                    borderRadius: "18px",
+                    boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.13)",
+                    padding: "0.7em 2em",
+                    border: "2px solid #fffde7",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {isDarkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
+                </SidebarNavLink>
               </SidebarNav>
             </Sidebar>
           </>

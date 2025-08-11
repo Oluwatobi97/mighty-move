@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { useLocation } from "react-router-dom";
@@ -14,9 +14,9 @@ const Container = styled(motion.div)`
 `;
 
 const Card = styled(motion.section)`
-  background: #fffde7;
+  background: var(--card-background);
   border-radius: 24px;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+  box-shadow: 0 8px 32px 0 var(--shadow-color);
   padding: 2.5rem 2rem;
   margin-bottom: 2rem;
   @media (max-width: 600px) {
@@ -29,7 +29,7 @@ const Title = styled.h2`
   font-weight: 700;
   margin-bottom: 1.5rem;
   text-align: center;
-  color: #111;
+  color: var(--text-color);
 `;
 
 const Form = styled.form`
@@ -51,28 +51,30 @@ const InputGroup = styled.div`
 
 const Label = styled.label`
   font-weight: 600;
-  color: #111;
+  color: var(--text-color);
 `;
 
 const Input = styled.input`
   padding: 0.75rem 1rem;
   border-radius: 10px;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--border-color);
   font-size: 1rem;
   width: 100%;
   box-sizing: border-box;
   transition: border-color 0.2s, box-shadow 0.2s;
+  background: var(--card-background);
+  color: var(--text-color);
 
   &:focus {
     outline: none;
-    border-color: #111;
+    border-color: var(--primary-color);
     box-shadow: 0 0 0 2px rgba(17, 17, 17, 0.1);
   }
 `;
 
 const Button = styled(motion.button)`
-  background: #111;
-  color: #fff;
+  background: var(--accent-color);
+  color: var(--primary-color);
   border: none;
   border-radius: 10px;
   padding: 0.75rem 1.5rem;
@@ -85,7 +87,8 @@ const Button = styled(motion.button)`
   margin-top: 1.5rem;
 
   &:hover {
-    background: #333;
+    background: var(--accent-color);
+    opacity: 0.9;
     transform: translateY(-2px);
   }
 
@@ -108,6 +111,11 @@ const ErrorMessage = styled(motion.div)`
   border-radius: 10px;
   margin-top: 1rem;
   font-weight: 500;
+
+  body.dark-mode & {
+    background: #331e1e;
+    color: #ef5350;
+  }
 `;
 
 const SuccessCard = styled(motion.div)`
@@ -116,13 +124,17 @@ const SuccessCard = styled(motion.div)`
   padding: 1.5rem;
   margin-top: 1.5rem;
   box-shadow: 0 4px 16px 0 rgba(31, 38, 135, 0.08);
+
+  body.dark-mode & {
+    background: #1e2e1e;
+  }
 `;
 
 const LocationTitle = styled.h3`
   font-size: 1.3rem;
   font-weight: 700;
   margin-bottom: 1rem;
-  color: #111;
+  color: var(--text-color);
 `;
 
 const LocationInfo = styled.div`
@@ -135,31 +147,85 @@ const LocationItem = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 0.75rem;
-  background: #fff;
+  background: var(--card-background);
   border-radius: 10px;
-  box-shadow: 0 2px 8px 0 rgba(31, 38, 135, 0.06);
+  box-shadow: 0 2px 8px 0 var(--shadow-color);
 `;
 
 const LocationLabel = styled.span`
   font-weight: 600;
-  color: #111;
+  color: var(--text-color);
 `;
 
 const LocationValue = styled.span`
   font-weight: 500;
-  color: #333;
+  color: var(--text-color);
 `;
 
-const MapPlaceholder = styled.div`
-  height: 200px;
+const MapContainer = styled.div`
+  height: 300px;
   background: #f5f5f5;
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 1rem 0;
+  position: relative;
+  overflow: hidden;
+
+  body.dark-mode & {
+    background: #2d2d2d;
+  }
+`;
+
+const MapPlaceholder = styled.div`
+  text-align: center;
   color: #888;
   font-weight: 500;
+
+  body.dark-mode & {
+    color: #aaa;
+  }
+`;
+
+const MapMarker = styled.div`
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: #1976d2;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 0 4px rgba(25, 118, 210, 0.3);
+  animation: pulse 2s infinite;
+
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(25, 118, 210, 0.7);
+    }
+    70% {
+      box-shadow: 0 0 0 10px rgba(25, 118, 210, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(25, 118, 210, 0);
+    }
+  }
+
+  body.dark-mode & {
+    background: #42a5f5;
+    box-shadow: 0 0 0 4px rgba(66, 165, 245, 0.3);
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(66, 165, 245, 0.7);
+      }
+      70% {
+        box-shadow: 0 0 0 10px rgba(66, 165, 245, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(66, 165, 245, 0);
+      }
+    }
+  }
 `;
 
 const Spinner = styled.div`
@@ -170,6 +236,12 @@ const Spinner = styled.div`
   width: 36px;
   height: 36px;
   animation: spin 1s linear infinite;
+
+  body.dark-mode & {
+    border: 4px solid #444;
+    border-top: 4px solid #fff;
+  }
+
   @keyframes spin {
     0% {
       transform: rotate(0deg);
@@ -189,6 +261,22 @@ const TrackingIdDisplay = styled.div`
   font-weight: 600;
   margin-bottom: 1rem;
   font-size: 1.1rem;
+
+  body.dark-mode & {
+    background: #1e2e3e;
+    color: #42a5f5;
+  }
+`;
+
+const UpdateInfo = styled.div`
+  text-align: center;
+  color: #666;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+
+  body.dark-mode & {
+    color: #aaa;
+  }
 `;
 
 const TrackBooking: React.FC = () => {
@@ -198,7 +286,9 @@ const TrackBooking: React.FC = () => {
   );
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const locationHook = useLocation();
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     // Check if tracking ID is provided in URL query parameters
@@ -211,6 +301,22 @@ const TrackBooking: React.FC = () => {
     }
   }, [locationHook.search]);
 
+  useEffect(() => {
+    // Set up interval to update location every 10 minutes (600000 ms)
+    if (trackingId && !loading) {
+      intervalRef.current = setInterval(() => {
+        handleTrackWithId(trackingId);
+      }, 600000); // 10 minutes
+    }
+
+    // Clean up interval on unmount or when trackingId changes
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [trackingId, loading]);
+
   const handleTrackWithId = async (id: string) => {
     if (!id.trim()) {
       setError("Please enter a tracking ID.");
@@ -220,7 +326,6 @@ const TrackBooking: React.FC = () => {
     try {
       setLoading(true);
       setError("");
-      setLocation(null);
 
       const response = await axios.get(
         `${
@@ -230,20 +335,32 @@ const TrackBooking: React.FC = () => {
 
       if (response.data.location) {
         setLocation(response.data.location);
+        setLastUpdated(new Date());
       } else {
         setError("No location found for this tracking ID.");
+        setLocation(null);
       }
     } catch (err: any) {
       console.error("Tracking failed:", err);
       setError(err.response?.data?.error || "Failed to fetch tracking info.");
+      setLocation(null);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleTrack = async (e: React.FormEvent) => {
+  const handleTrack = (e: React.FormEvent) => {
     e.preventDefault();
     handleTrackWithId(trackingId);
+  };
+
+  // Convert lat/lng to pixel positions for the map visualization
+  const convertToPixelPosition = (lat: number, lng: number) => {
+    // This is a simplified conversion for demonstration
+    // In a real app, you would use a proper map projection
+    const x = ((lng + 180) / 360) * 100;
+    const y = ((90 - lat) / 180) * 100;
+    return { x, y };
   };
 
   return (
@@ -301,7 +418,37 @@ const TrackBooking: React.FC = () => {
             {trackingId && (
               <TrackingIdDisplay>Tracking ID: {trackingId}</TrackingIdDisplay>
             )}
-            <MapPlaceholder>Map visualization would appear here</MapPlaceholder>
+
+            <MapContainer>
+              {location ? (
+                <>
+                  <MapMarker
+                    style={{
+                      left: `${
+                        convertToPixelPosition(location.lat, location.lng).x
+                      }%`,
+                      top: `${
+                        convertToPixelPosition(location.lat, location.lng).y
+                      }%`,
+                    }}
+                  />
+                  <MapPlaceholder>
+                    Map visualization of package location
+                  </MapPlaceholder>
+                </>
+              ) : (
+                <MapPlaceholder>
+                  Map visualization would appear here
+                </MapPlaceholder>
+              )}
+            </MapContainer>
+
+            {lastUpdated && (
+              <UpdateInfo>
+                Last updated: {lastUpdated.toLocaleTimeString()}
+              </UpdateInfo>
+            )}
+
             <LocationInfo>
               <LocationItem>
                 <LocationLabel>Latitude:</LocationLabel>
