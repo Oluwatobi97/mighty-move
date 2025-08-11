@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import ServiceForm from "../ServiceForm";
 import { createBooking } from "../../utils/api";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Container = styled(motion.div)`
   padding: 2.5rem 2rem 2rem 2rem;
@@ -74,32 +75,50 @@ const LogisticsBooking: React.FC = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (values: Record<string, string>) => {
-    console.log("LogisticsBooking submitted:", values);
-
     try {
       const token = localStorage.getItem("token");
-      if (!token) throw new Error("Not authenticated");
+      if (!token) {
+        toast.error("You must be logged in to book a service.");
+        return;
+      }
+
+      // Set dynamic price based on delivery type
+      const priceMap: Record<string, number> = {
+        Standard: 25,
+        Express: 50,
+      };
+
+      const price = priceMap[values.deliveryType] || 25;
 
       await createBooking(
         {
           service_type: "Logistics",
           address: `${values.sender} to ${values.receiver}`,
           date: values.pickupDate,
-          price: 0, // Add pricing logic if you want
-          package: values.package,
-          delivery_type: values.deliveryType,
+          price: price,
+          details: {
+            sender: values.sender,
+            receiver: values.receiver,
+            package: values.package,
+            delivery_type: values.deliveryType,
+            pickup_date: values.pickupDate,
+          },
         },
         token
       );
 
+      toast.success("Logistics booking submitted successfully!");
+
+      // Reset form
+      if (formRef.current && formRef.current.reset) {
+        formRef.current.reset();
+      }
+
       // Navigate to home or bookings page
       navigate("/home");
     } catch (err: any) {
-      alert(err.message || "Booking failed. Try again.");
-    }
-
-    if (formRef.current && formRef.current.reset) {
-      formRef.current.reset();
+      console.error("Booking error:", err);
+      toast.error(err.message || "Failed to submit booking. Please try again.");
     }
   };
 

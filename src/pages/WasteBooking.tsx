@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import ServiceForm from "../components/ServiceForm";
-import { mockBookService } from "../utils/api";
+import { createBooking } from "../utils/api";
 import { toast } from "react-toastify";
 
 const Container = styled(motion.div)`
@@ -53,11 +53,59 @@ const fields = [
 
 const WasteBooking: React.FC = () => {
   const formRef = useRef<any>(null);
+
   const handleSubmit = async (values: Record<string, string>) => {
-    await mockBookService(values);
-    toast.success("Waste booking submitted!");
-    if (formRef.current && formRef.current.reset) formRef.current.reset();
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        toast.error("You must be logged in to book a service.");
+        return;
+      }
+
+      // Set dynamic price based on waste type and frequency
+      const basePriceMap: Record<string, number> = {
+        Household: 50,
+        Construction: 150,
+        Commercial: 200,
+        Recyclable: 40,
+        Hazardous: 300,
+      };
+
+      const frequencyMultiplier: Record<string, number> = {
+        "One-time": 1,
+        Recurring: 0.9, // 10% discount for recurring
+      };
+
+      const basePrice = basePriceMap[values.wasteType] || 50;
+      const multiplier = frequencyMultiplier[values.frequency] || 1;
+      const price = Math.round(basePrice * multiplier);
+
+      await createBooking(
+        {
+          service_type: "Waste",
+          address: values.address,
+          date: new Date().toISOString(), // Use current date, user can specify preferred date in notes
+          price: price,
+          details: {
+            waste_type: values.wasteType,
+            frequency: values.frequency,
+            address: values.address,
+          },
+        },
+        token
+      );
+
+      toast.success("Waste booking submitted successfully!");
+
+      if (formRef.current && formRef.current.reset) {
+        formRef.current.reset();
+      }
+    } catch (err: any) {
+      console.error("Booking error:", err);
+      toast.error(err.message || "Failed to submit booking. Please try again.");
+    }
   };
+
   return (
     <Container
       initial={{ opacity: 0, y: 30 }}
@@ -77,6 +125,7 @@ const WasteBooking: React.FC = () => {
         </ArticleText>
       </Card>
       <ServiceForm
+        ref={formRef}
         fields={fields}
         onSubmit={handleSubmit}
         submitLabel="Book Waste Pickup"
