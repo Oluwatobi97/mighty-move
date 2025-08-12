@@ -113,8 +113,10 @@ const AdminDashboard: React.FC = () => {
       getAllBookings(token)
         .then((data) => {
           // Parse details if they're stored as JSON strings
+          // Map tracking_id to trackingNumber for frontend compatibility
           const parsedData = data.map((booking: any) => ({
             ...booking,
+            trackingNumber: booking.tracking_id, // Map backend field to frontend field
             details:
               typeof booking.details === "string"
                 ? JSON.parse(booking.details)

@@ -16,14 +16,14 @@
 }
 
 body.dark-mode {
-  --background-color: #121212;
-  --text-color: #FFFFFF;
-  --card-background: #1E1E1E;
-  --accent-color: #F57F17;
+  --background-color: #1a1a1a;
+  --text-color: #ffffff;
+  --card-background: #2d2d2d;
+  --accent-color: #FDD835;
   --border-color: #444444;
-  --shadow-color: rgba(0, 0, 0, 0.30);
-  --primary-color: #FFFFFF;
-  --secondary-color: #BBBBBB;
+  --shadow-color: rgba(0, 0, 0, 0.40);
+  --primary-color: #ffffff;
+  --secondary-color: #bbbbbb;
   --success-color: #66bb6a;
   --error-color: #ef5350;
   --warning-color: #ffa726;
