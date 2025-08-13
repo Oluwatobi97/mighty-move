@@ -47,18 +47,14 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({
     const root = document.documentElement;
     const theme = isDarkMode ? darkTheme : lightTheme;
 
-    root.style.setProperty("--background-color", theme.colors.background);
-    root.style.setProperty("--text-color", theme.colors.text);
-    root.style.setProperty("--card-background", theme.colors.card);
-    root.style.setProperty("--accent-color", theme.colors.accent);
-    root.style.setProperty("--border-color", theme.colors.border);
-    root.style.setProperty("--shadow-color", theme.colors.shadow);
-    root.style.setProperty("--primary-color", theme.colors.primary);
-    root.style.setProperty("--secondary-color", theme.colors.secondary);
-    root.style.setProperty("--success-color", theme.colors.success);
-    root.style.setProperty("--error-color", theme.colors.error);
-    root.style.setProperty("--warning-color", theme.colors.warning);
-    root.style.setProperty("--info-color", theme.colors.info);
+    root.style.setProperty("--bg-color", theme.colors.background);
+    root.style.setProperty("--text-primary", theme.colors.text);
+    root.style.setProperty("--card-bg", theme.colors.card);
+    root.style.setProperty("--text-secondary", theme.colors.secondaryText);
+    root.style.setProperty("--highlight-color", theme.colors.accent);
+    root.style.setProperty("--btn-text", theme.colors.button);
+    root.style.setProperty("--nav-bg", theme.colors.nav);
+    root.style.setProperty("--shadow", theme.colors.shadow);
   }, [isDarkMode]);
 
   const toggleTheme = () => {
