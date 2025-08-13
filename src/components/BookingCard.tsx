@@ -33,9 +33,20 @@ const Card = styled(motion.div)`
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
 
+  // Dark mode styles
+  body.dark-mode & {
+    background: #2d2d2d;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+  }
+
   &:hover {
     transform: translateY(-5px);
     box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.15);
+    
+    // Dark mode hover styles
+    body.dark-mode & {
+      box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.6);
+    }
   }
 
   @media (max-width: 600px) {
@@ -54,16 +65,32 @@ const ServiceType = styled.h3`
   font-size: 1.2rem;
   font-weight: 700;
   margin: 0;
+  color: #111;
+  
+  // Dark mode styles
+  body.dark-mode & {
+    color: #ffffff;
+  }
 `;
 
 const DateText = styled.div`
   font-size: 1rem;
   color: #444;
+  
+  // Dark mode styles
+  body.dark-mode & {
+    color: #bbbbbb;
+  }
 `;
 
 const UserText = styled.div`
   font-size: 0.95rem;
   color: #888;
+  
+  // Dark mode styles
+  body.dark-mode & {
+    color: #bbbbbb;
+  }
 `;
 
 const DetailRow = styled.div`
@@ -76,11 +103,21 @@ const DetailRow = styled.div`
 const DetailLabel = styled.span`
   color: #666;
   font-weight: 500;
+  
+  // Dark mode styles
+  body.dark-mode & {
+    color: #bbbbbb;
+  }
 `;
 
 const DetailValue = styled.span`
   color: #333;
   font-weight: 600;
+  
+  // Dark mode styles
+  body.dark-mode & {
+    color: #ffffff;
+  }
 `;
 
 const WorkerBadge = styled.div<{ assigned: boolean }>`
@@ -90,6 +127,12 @@ const WorkerBadge = styled.div<{ assigned: boolean }>`
   border-radius: 12px;
   font-size: 0.8rem;
   font-weight: 600;
+  
+  // Dark mode styles
+  body.dark-mode & {
+    background: ${(props) => (props.assigned ? "#1b5e20" : "#444444")};
+    color: ${(props) => (props.assigned ? "#66bb6a" : "#bbbbbb")};
+  }
 `;
 
 const NotesText = styled.div`
@@ -100,6 +143,12 @@ const NotesText = styled.div`
   padding: 0.5rem;
   border-radius: 8px;
   margin-top: 0.5rem;
+  
+  // Dark mode styles
+  body.dark-mode & {
+    background: #444444;
+    color: #bbbbbb;
+  }
 `;
 
 const TrackingLink = styled.div`
@@ -111,6 +160,12 @@ const TrackingLink = styled.div`
   font-weight: 600;
   margin-top: 0.5rem;
   font-size: 0.9rem;
+  
+  // Dark mode styles
+  body.dark-mode & {
+    background: #0d47a1;
+    color: #64b5f6;
+  }
 `;
 
 const ModalOverlay = styled.div`
@@ -124,6 +179,11 @@ const ModalOverlay = styled.div`
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  
+  // Dark mode styles
+  body.dark-mode & {
+    background: rgba(0, 0, 0, 0.8);
+  }
 `;
 
 const ModalContent = styled.div`
@@ -136,6 +196,12 @@ const ModalContent = styled.div`
   overflow-y: auto;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
   position: relative;
+  
+  // Dark mode styles
+  body.dark-mode & {
+    background: #2d2d2d;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+  }
 
   @media (max-width: 600px) {
     padding: 1.5rem;
@@ -146,6 +212,11 @@ const ModalTitle = styled.h2`
   margin-top: 0;
   color: #111;
   font-size: 1.5rem;
+  
+  // Dark mode styles
+  body.dark-mode & {
+    color: #ffffff;
+  }
 `;
 
 const CloseButton = styled.button`
@@ -157,6 +228,11 @@ const CloseButton = styled.button`
   font-size: 1.5rem;
   cursor: pointer;
   color: #888;
+  
+  // Dark mode styles
+  body.dark-mode & {
+    color: #bbbbbb;
+  }
 `;
 
 const DetailGrid = styled.div`
@@ -179,12 +255,22 @@ const DetailHeader = styled.div`
   font-weight: 600;
   color: #666;
   font-size: 0.9rem;
+  
+  // Dark mode styles
+  body.dark-mode & {
+    color: #bbbbbb;
+  }
 `;
 
 const DetailBody = styled.div`
   font-weight: 500;
   color: #111;
   margin-top: 0.2rem;
+  
+  // Dark mode styles
+  body.dark-mode & {
+    color: #ffffff;
+  }
 `;
 
 const TrackingButton = styled.button`
@@ -201,6 +287,15 @@ const TrackingButton = styled.button`
 
   &:hover {
     background: #1565c0;
+  }
+  
+  // Dark mode styles
+  body.dark-mode & {
+    background: #0d47a1;
+    
+    &:hover {
+      background: #1565c0;
+    }
   }
 `;
 
@@ -355,84 +450,4 @@ const BookingCard: React.FC<BookingCardProps> = ({
             {phone && (
               <div>
                 <DetailHeader>Phone</DetailHeader>
-                <DetailBody>{phone}</DetailBody>
-              </div>
-            )}
-
-            {assignedWorker && (
-              <div>
-                <DetailHeader>Assigned Worker</DetailHeader>
-                <DetailBody>{assignedWorker}</DetailBody>
-              </div>
-            )}
-
-            {notes && (
-              <div>
-                <DetailHeader>Notes</DetailHeader>
-                <DetailBody>{notes}</DetailBody>
-              </div>
-            )}
-
-            {details && serviceType && (
-              <div>
-                <DetailHeader>Service Details</DetailHeader>
-                <DetailBody>
-                  {serviceType === "Logistics" && (
-                    <div>
-                      <div>
-                        <strong>Sender:</strong> {details.sender}
-                      </div>
-                      <div>
-                        <strong>Receiver:</strong> {details.receiver}
-                      </div>
-                      <div>
-                        <strong>Package:</strong> {details.package}
-                      </div>
-                      <div>
-                        <strong>Delivery Type:</strong> {details.delivery_type}
-                      </div>
-                    </div>
-                  )}
-                  {serviceType === "Waste" && (
-                    <div>
-                      <div>
-                        <strong>Waste Type:</strong> {details.waste_type}
-                      </div>
-                      <div>
-                        <strong>Frequency:</strong> {details.frequency}
-                      </div>
-                    </div>
-                  )}
-                  {serviceType.includes &&
-                  (serviceType.includes("Van") ||
-                    serviceType.includes("Truck") ||
-                    serviceType.includes("Vehicle")) ? (
-                    <div>
-                      <div>
-                        <strong>Pickup:</strong> {details.pickup}
-                      </div>
-                      <div>
-                        <strong>Drop-off:</strong> {details.dropoff}
-                      </div>
-                      <div>
-                        <strong>Vehicle:</strong> {details.vehicle}
-                      </div>
-                    </div>
-                  ) : null}
-                </DetailBody>
-              </div>
-            )}
-
-            {trackingNumber && status !== "Pending" && (
-              <TrackingButton onClick={handleTrackClick}>
-                Track This Booking
-              </TrackingButton>
-            )}
-          </ModalContent>
-        </ModalOverlay>
-      )}
-    </>
-  );
-};
-
-export default BookingCard;
+                <DetailBody>{phone}</

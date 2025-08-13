@@ -160,9 +160,7 @@ const LogisticsBooking: React.FC = () => {
         <b>Account Number:</b> 19477556
         <br />
         <b>PayPal:</b>{" "}
-        <a href="mailto:Olumidy_sezy@hotmail.co.uk">
-          Olumidy_sezy@hotmail.co.uk
-        </a>
+        <a href="Olumidy_sezy@hotmail.co.uk">Olumidy_sezy@hotmail.co.uk</a>
       </PaymentSection>
     </Container>
   );

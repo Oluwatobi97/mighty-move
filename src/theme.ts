@@ -28,14 +28,14 @@ export const lightTheme = {
 
 export const darkTheme = {
   colors: {
-    background: "#1a1a1a", // Darker background
-    accent: "#FDD835", // Vibrant yellow for better contrast
+    background: "#121212", // Deeper dark background
+    accent: "#FFD600", // Brighter accent for better contrast
     text: "#ffffff", // Pure white text
-    card: "#2d2d2d", // Darker card background
-    shadow: "rgba(0,0,0,0.40)",
+    card: "#1e1e1e", // Darker card background
+    shadow: "rgba(0,0,0,0.50)", // Deeper shadow
     primary: "#ffffff",
     secondary: "#bbbbbb",
-    border: "#444444",
+    border: "#333333",
     success: "#66bb6a",
     error: "#ef5350",
     warning: "#ffa726",
@@ -51,7 +51,7 @@ export const darkTheme = {
   },
   spacing: (factor: number) => `${factor * 8}px`,
   borderRadius: "18px",
-  boxShadow: "0 8px 32px 0 rgba(0, 0, 0, 0.40)",
+  boxShadow: "0 8px 32px 0 rgba(0, 0, 0, 0.50)",
 };
 
 export type ThemeType = typeof lightTheme;
