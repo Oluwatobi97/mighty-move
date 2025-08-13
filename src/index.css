@@ -1,88 +1,102 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
+/* Light Mode */
 :root {
-  --background-color: #FFFFFF;
-  --text-color: #111111;
-  --card-background: #FFFDE7;
-  --accent-color: #FFF9C4;
-  --border-color: #e0e0e0;
-  --shadow-color: rgba(31, 38, 135, 0.10);
-  --primary-color: #111111;
-  --secondary-color: #444444;
-  --success-color: #4caf50;
-  --error-color: #f44336;
-  --warning-color: #ff9800;
-  --info-color: #2196f3;
+  --bg-color: #ffffff;
+  --card-bg: #fdfdfd;
+  --text-primary: #000000;
+  --text-secondary: #555555;
+  --highlight-color: #ffd369;
+  --btn-text: #000000;
+  --nav-bg: #fff8dc;
+  --shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-body.dark-mode {
-  --background-color: #121212; /* Deeper dark background */
-  --text-color: #ffffff;
-  --card-background: #1e1e1e; /* Darker card background */
-  --accent-color: #FFD600; /* Brighter accent for better contrast */
-  --border-color: #333333;
-  --shadow-color: rgba(0, 0, 0, 0.5);
-  --primary-color: #ffffff;
-  --secondary-color: #bbbbbb;
-  --success-color: #66bb6a;
-  --error-color: #ef5350;
-  --warning-color: #ffa726;
-  --info-color: #42a5f5;
+.dark-mode {
+  /* Dark Mode */
+  --bg-color: #121212;
+  --card-bg: #1e1e1e;
+  --text-primary: #eaeaea;
+  --text-secondary: #b3b3b3;
+  --highlight-color: #ffd369;
+  --btn-text: #121212;
+  --nav-bg: #1c1c1c;
+  --shadow: 0px 4px 12px rgba(0, 0, 0, 0.5);
 }
 
-body, html {
+/* Apply Variables */
+body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  background: var(--background-color);
-  color: var(--text-color);
+  background-color: var(--bg-color);
+  color: var(--text-primary);
   font-family: 'Poppins', Inter, Roboto, Arial, sans-serif;
   font-size: 16px;
   box-sizing: border-box;
-  transition: background-color 0.3s, color 0.3s;
+  transition: all 0.3s ease;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Poppins', Inter, Roboto, Arial, sans-serif;
-  color: var(--text-color);
+  color: var(--text-primary);
   margin-top: 0;
 }
 
 a {
-  color: var(--primary-color);
+  color: var(--text-primary);
   text-decoration: none;
   transition: color 0.2s;
 }
 
 a:hover {
-  color: var(--accent-color);
+  color: var(--highlight-color);
 }
 
 button {
-  font-family: inherit;
-  font-size: 1rem;
-  border-radius: 18px;
+  background-color: var(--highlight-color);
+  color: var(--btn-text);
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: bold;
   border: none;
-  background: var(--accent-color);
-  color: var(--primary-color);
-  box-shadow: 0 8px 32px 0 var(--shadow-color);
-  padding: 0.75em 2em;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  transition: background 0.3s ease;
 }
 
 button:hover {
-  transform: translateY(-4px) scale(1.04);
-  box-shadow: 0 16px 40px 0 rgba(31, 38, 135, 0.18);
-  background: var(--accent-color);
-  opacity: 0.9;
+  background-color: #e6bd50;
 }
 
 input, select, textarea {
-  background: var(--card-background);
-  color: var(--text-color);
-  border: 1px solid var(--border-color);
-  transition: background 0.3s, color 0.3s, border 0.3s;
+  background-color: var(--card-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--text-secondary);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-family: 'Poppins', Inter, Roboto, Arial, sans-serif;
+  font-size: 16px;
+}
+
+nav {
+  background-color: var(--nav-bg);
+  box-shadow: var(--shadow);
+}
+
+.card {
+  background-color: var(--card-bg);
+  color: var(--text-primary);
+  box-shadow: var(--shadow);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.card p {
+  color: var(--text-secondary);
+}
+
+.nav-link:hover {
+  color: var(--highlight-color);
 }
 
 /* Scrollbar styling */
@@ -91,14 +105,14 @@ input, select, textarea {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--card-background);
+  background: var(--card-bg);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--accent-color);
+  background: var(--highlight-color);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-color);
+  background: var(--text-primary);
 }

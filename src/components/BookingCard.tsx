@@ -20,9 +20,9 @@ export type BookingCardProps = {
 };
 
 const Card = styled(motion.div)`
-  background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
   padding: 1.5rem 1.2rem;
   margin-bottom: 1.2rem;
   display: flex;
@@ -33,20 +33,9 @@ const Card = styled(motion.div)`
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
 
-  // Dark mode styles
-  body.dark-mode & {
-    background: #2d2d2d;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
-  }
-
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.15);
-    
-    // Dark mode hover styles
-    body.dark-mode & {
-      box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.6);
-    }
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.3);
   }
 
   @media (max-width: 600px) {
@@ -65,32 +54,17 @@ const ServiceType = styled.h3`
   font-size: 1.2rem;
   font-weight: 700;
   margin: 0;
-  color: #111;
-  
-  // Dark mode styles
-  body.dark-mode & {
-    color: #ffffff;
-  }
+  color: var(--text-primary);
 `;
 
 const DateText = styled.div`
   font-size: 1rem;
-  color: #444;
-  
-  // Dark mode styles
-  body.dark-mode & {
-    color: #bbbbbb;
-  }
+  color: var(--text-secondary);
 `;
 
 const UserText = styled.div`
   font-size: 0.95rem;
-  color: #888;
-  
-  // Dark mode styles
-  body.dark-mode & {
-    color: #bbbbbb;
-  }
+  color: var(--text-secondary);
 `;
 
 const DetailRow = styled.div`
@@ -101,23 +75,13 @@ const DetailRow = styled.div`
 `;
 
 const DetailLabel = styled.span`
-  color: #666;
+  color: var(--text-secondary);
   font-weight: 500;
-  
-  // Dark mode styles
-  body.dark-mode & {
-    color: #bbbbbb;
-  }
 `;
 
 const DetailValue = styled.span`
-  color: #333;
+  color: var(--text-primary);
   font-weight: 600;
-  
-  // Dark mode styles
-  body.dark-mode & {
-    color: #ffffff;
-  }
 `;
 
 const WorkerBadge = styled.div<{ assigned: boolean }>`
@@ -127,7 +91,7 @@ const WorkerBadge = styled.div<{ assigned: boolean }>`
   border-radius: 12px;
   font-size: 0.8rem;
   font-weight: 600;
-  
+
   // Dark mode styles
   body.dark-mode & {
     background: ${(props) => (props.assigned ? "#1b5e20" : "#444444")};
@@ -137,17 +101,16 @@ const WorkerBadge = styled.div<{ assigned: boolean }>`
 
 const NotesText = styled.div`
   font-size: 0.85rem;
-  color: #666;
+  color: var(--text-secondary);
   font-style: italic;
-  background: #f9f9f9;
+  background: rgba(0, 0, 0, 0.05);
   padding: 0.5rem;
   border-radius: 8px;
   margin-top: 0.5rem;
-  
+
   // Dark mode styles
   body.dark-mode & {
-    background: #444444;
-    color: #bbbbbb;
+    background: rgba(255, 255, 255, 0.05);
   }
 `;
 
@@ -160,7 +123,7 @@ const TrackingLink = styled.div`
   font-weight: 600;
   margin-top: 0.5rem;
   font-size: 0.9rem;
-  
+
   // Dark mode styles
   body.dark-mode & {
     background: #0d47a1;
@@ -179,7 +142,7 @@ const ModalOverlay = styled.div`
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  
+
   // Dark mode styles
   body.dark-mode & {
     background: rgba(0, 0, 0, 0.8);
@@ -187,21 +150,16 @@ const ModalOverlay = styled.div`
 `;
 
 const ModalContent = styled.div`
-  background: #fff;
-  border-radius: 18px;
+  background: var(--card-bg);
+  border-radius: 12px;
   padding: 2rem;
   max-width: 500px;
   width: 90%;
   max-height: 80vh;
   overflow-y: auto;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow);
   position: relative;
-  
-  // Dark mode styles
-  body.dark-mode & {
-    background: #2d2d2d;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
-  }
+  color: var(--text-primary);
 
   @media (max-width: 600px) {
     padding: 1.5rem;
@@ -210,13 +168,8 @@ const ModalContent = styled.div`
 
 const ModalTitle = styled.h2`
   margin-top: 0;
-  color: #111;
+  color: var(--text-primary);
   font-size: 1.5rem;
-  
-  // Dark mode styles
-  body.dark-mode & {
-    color: #ffffff;
-  }
 `;
 
 const CloseButton = styled.button`
@@ -227,12 +180,7 @@ const CloseButton = styled.button`
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
-  color: #888;
-  
-  // Dark mode styles
-  body.dark-mode & {
-    color: #bbbbbb;
-  }
+  color: var(--text-secondary);
 `;
 
 const DetailGrid = styled.div`
@@ -253,29 +201,19 @@ const DetailItem = styled.div`
 
 const DetailHeader = styled.div`
   font-weight: 600;
-  color: #666;
+  color: var(--text-secondary);
   font-size: 0.9rem;
-  
-  // Dark mode styles
-  body.dark-mode & {
-    color: #bbbbbb;
-  }
 `;
 
 const DetailBody = styled.div`
   font-weight: 500;
-  color: #111;
+  color: var(--text-primary);
   margin-top: 0.2rem;
-  
-  // Dark mode styles
-  body.dark-mode & {
-    color: #ffffff;
-  }
 `;
 
 const TrackingButton = styled.button`
-  background: #1976d2;
-  color: white;
+  background-color: var(--highlight-color);
+  color: var(--btn-text);
   border: none;
   border-radius: 8px;
   padding: 0.7rem 1.2rem;
@@ -284,18 +222,10 @@ const TrackingButton = styled.button`
   cursor: pointer;
   margin-top: 1rem;
   width: 100%;
+  transition: background 0.3s ease;
 
   &:hover {
-    background: #1565c0;
-  }
-  
-  // Dark mode styles
-  body.dark-mode & {
-    background: #0d47a1;
-    
-    &:hover {
-      background: #1565c0;
-    }
+    background-color: #e6bd50;
   }
 `;
 
@@ -450,4 +380,84 @@ const BookingCard: React.FC<BookingCardProps> = ({
             {phone && (
               <div>
                 <DetailHeader>Phone</DetailHeader>
-                <DetailBody>{phone}</
+                <DetailBody>{phone}</DetailBody>
+              </div>
+            )}
+
+            {assignedWorker && (
+              <div>
+                <DetailHeader>Assigned Worker</DetailHeader>
+                <DetailBody>{assignedWorker}</DetailBody>
+              </div>
+            )}
+
+            {notes && (
+              <div>
+                <DetailHeader>Notes</DetailHeader>
+                <DetailBody>{notes}</DetailBody>
+              </div>
+            )}
+
+            {details && serviceType && (
+              <div>
+                <DetailHeader>Service Details</DetailHeader>
+                <DetailBody>
+                  {serviceType === "Logistics" && (
+                    <div>
+                      <div>
+                        <strong>Sender:</strong> {details.sender}
+                      </div>
+                      <div>
+                        <strong>Receiver:</strong> {details.receiver}
+                      </div>
+                      <div>
+                        <strong>Package:</strong> {details.package}
+                      </div>
+                      <div>
+                        <strong>Delivery Type:</strong> {details.delivery_type}
+                      </div>
+                    </div>
+                  )}
+                  {serviceType === "Waste" && (
+                    <div>
+                      <div>
+                        <strong>Waste Type:</strong> {details.waste_type}
+                      </div>
+                      <div>
+                        <strong>Frequency:</strong> {details.frequency}
+                      </div>
+                    </div>
+                  )}
+                  {serviceType.includes &&
+                  (serviceType.includes("Van") ||
+                    serviceType.includes("Truck") ||
+                    serviceType.includes("Vehicle")) ? (
+                    <div>
+                      <div>
+                        <strong>Pickup:</strong> {details.pickup}
+                      </div>
+                      <div>
+                        <strong>Drop-off:</strong> {details.dropoff}
+                      </div>
+                      <div>
+                        <strong>Vehicle:</strong> {details.vehicle}
+                      </div>
+                    </div>
+                  ) : null}
+                </DetailBody>
+              </div>
+            )}
+
+            {trackingNumber && status !== "Pending" && (
+              <TrackingButton onClick={handleTrackClick}>
+                Track This Booking
+              </TrackingButton>
+            )}
+          </ModalContent>
+        </ModalOverlay>
+      )}
+    </>
+  );
+};
+
+export default BookingCard;

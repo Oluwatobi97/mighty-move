@@ -6,8 +6,8 @@ import { AuthContext } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 
 const HeaderBar = styled(motion.header)`
-  background: #fff9c4;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+  background: var(--nav-bg);
+  box-shadow: var(--shadow);
   padding: 0.7rem 1.5rem 0.7rem 1.5rem;
   border-bottom-left-radius: 24px;
   border-bottom-right-radius: 24px;
@@ -16,12 +16,6 @@ const HeaderBar = styled(motion.header)`
   justify-content: space-between;
   position: relative;
   min-height: 64px;
-
-  // Dark mode styles
-  body.dark-mode & {
-    background: #1e1e1e;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-  }
 `;
 
 const LogoLink = styled(Link)`
@@ -34,14 +28,9 @@ const LogoImg = styled.img`
   height: 40px;
   width: auto;
   border-radius: 10px;
-  box-shadow: 0 2px 8px #fffde7;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   @media (max-width: 600px) {
     height: 28px;
-  }
-
-  // Dark mode styles
-  body.dark-mode & {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   }
 `;
 
@@ -55,7 +44,7 @@ const Nav = styled.nav`
 `;
 
 const NavLink = styled(Link)`
-  color: #111111;
+  color: var(--text-primary);
   font-weight: 500;
   font-size: 1rem;
   padding: 0.35em 1em;
@@ -65,19 +54,8 @@ const NavLink = styled(Link)`
   text-decoration: none;
 
   &:hover {
-    background: #fff176;
+    color: var(--highlight-color);
     transform: translateY(-2px) scale(1.05);
-    box-shadow: 0 4px 16px 0 rgba(31, 38, 135, 0.1);
-  }
-
-  // Dark mode styles
-  body.dark-mode & {
-    color: #ffffff;
-
-    &:hover {
-      background: #f57f17;
-      box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.3);
-    }
   }
 `;
 
@@ -110,14 +88,9 @@ const Hamburger = styled.div`
 const Bar = styled.div`
   width: 22px;
   height: 2.5px;
-  background: #111;
+  background: var(--text-primary);
   margin: 2px 0;
   border-radius: 2px;
-
-  // Dark mode styles
-  body.dark-mode & {
-    background: #ffffff;
-  }
 `;
 
 const SidebarOverlay = styled(motion.div)`
@@ -137,7 +110,7 @@ const Sidebar = styled(motion.aside)`
   width: 80vw;
   max-width: 320px;
   height: 100vh;
-  background: #fff9c4;
+  background: var(--nav-bg);
   box-shadow: -8px 0 32px 0 rgba(31, 38, 135, 0.13);
   z-index: 1002;
   display: flex;
@@ -145,12 +118,6 @@ const Sidebar = styled(motion.aside)`
   padding: 2.5rem 1.5rem 1.5rem 1.5rem;
   @media (min-width: 901px) {
     display: none;
-  }
-
-  // Dark mode styles
-  body.dark-mode & {
-    background: #1e1e1e;
-    box-shadow: -8px 0 32px 0 rgba(0, 0, 0, 0.3);
   }
 `;
 
@@ -163,16 +130,11 @@ const CloseButton = styled.button`
   align-items: center;
   justify-content: center;
   font-size: 2rem;
-  color: #111;
+  color: var(--text-primary);
   align-self: flex-end;
   cursor: pointer;
   margin-bottom: 2rem;
   padding: 0;
-
-  // Dark mode styles
-  body.dark-mode & {
-    color: #ffffff;
-  }
 `;
 
 const SidebarNav = styled.nav`
@@ -182,7 +144,7 @@ const SidebarNav = styled.nav`
 `;
 
 const SidebarNavLink = styled(Link)`
-  color: #111111;
+  color: var(--text-primary);
   font-weight: 600;
   font-size: 1.2rem;
   padding: 0.7em 1.2em;
@@ -191,25 +153,14 @@ const SidebarNavLink = styled(Link)`
   text-decoration: none;
 
   &:hover {
-    background: #fff176;
+    color: var(--highlight-color);
     transform: scale(1.04);
-    box-shadow: 0 4px 16px 0 rgba(31, 38, 135, 0.1);
-  }
-
-  // Dark mode styles
-  body.dark-mode & {
-    color: #ffffff;
-
-    &:hover {
-      background: #f57f17;
-      box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.3);
-    }
   }
 `;
 
 const ThemeToggle = styled.button`
-  background: #111;
-  color: #fff9c4;
+  background: var(--highlight-color);
+  color: var(--btn-text);
   border: none;
   border-radius: 50%;
   width: 40px;
@@ -222,17 +173,7 @@ const ThemeToggle = styled.button`
   margin-left: 1rem;
 
   &:hover {
-    background: #333;
-  }
-
-  // Dark mode styles
-  body.dark-mode & {
-    background: #f57f17;
-    color: #121212;
-
-    &:hover {
-      background: #ff9800;
-    }
+    background: #e6bd50;
   }
 `;
 
@@ -295,14 +236,14 @@ const Header: React.FC = () => {
                   key={link.to}
                   to={link.to}
                   style={{
-                    background: "#FFD600",
-                    color: "#111",
+                    background: "var(--highlight-color)",
+                    color: "var(--btn-text)",
                     fontWeight: 700,
                     marginLeft: "0.5rem",
                     borderRadius: "18px",
                     boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.13)",
                     padding: "0.7em 2em",
-                    border: "2px solid #fffde7",
+                    border: "2px solid var(--card-bg)",
                     transition: "background 0.2s, transform 0.2s",
                   }}
                 >
@@ -320,14 +261,14 @@ const Header: React.FC = () => {
             to="#"
             onClick={handleLogout}
             style={{
-              background: "#fffde7",
+              background: "var(--card-bg)",
               color: "#d32f2f",
               fontWeight: 700,
               marginLeft: "1rem",
               borderRadius: "18px",
               boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.13)",
               padding: "0.7em 2em",
-              border: "2px solid #fffde7",
+              border: "2px solid var(--card-bg)",
               cursor: "pointer",
             }}
           >
@@ -389,14 +330,14 @@ const Header: React.FC = () => {
                           to={link.to}
                           onClick={() => setSidebarOpen(false)}
                           style={{
-                            background: "#FFD600",
-                            color: "#111",
+                            background: "var(--highlight-color)",
+                            color: "var(--btn-text)",
                             fontWeight: 700,
                             marginLeft: "0.5rem",
                             borderRadius: "18px",
                             boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.13)",
                             padding: "0.7em 2em",
-                            border: "2px solid #fffde7",
+                            border: "2px solid var(--card-bg)",
                             transition: "background 0.2s, transform 0.2s",
                           }}
                         >
@@ -421,14 +362,14 @@ const Header: React.FC = () => {
                       setSidebarOpen(false);
                     }}
                     style={{
-                      background: "#fffde7",
+                      background: "var(--card-bg)",
                       color: "#d32f2f",
                       fontWeight: 700,
                       marginLeft: "1rem",
                       borderRadius: "18px",
                       boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.13)",
                       padding: "0.7em 2em",
-                      border: "2px solid #fffde7",
+                      border: "2px solid var(--card-bg)",
                       cursor: "pointer",
                     }}
                   >
@@ -443,14 +384,14 @@ const Header: React.FC = () => {
                     setSidebarOpen(false);
                   }}
                   style={{
-                    background: isDarkMode ? "#f57f17" : "#111",
-                    color: isDarkMode ? "#121212" : "#fff9c4",
+                    background: "var(--highlight-color)",
+                    color: "var(--btn-text)",
                     fontWeight: 700,
                     marginLeft: "1rem",
                     borderRadius: "18px",
                     boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.13)",
                     padding: "0.7em 2em",
-                    border: "2px solid #fffde7",
+                    border: "2px solid var(--card-bg)",
                     cursor: "pointer",
                     display: "flex",
                     alignItems: "center",
