@@ -24,14 +24,14 @@ export const lightTheme = {
 
 export const darkTheme = {
   colors: {
-    background: "#121212", // deep charcoal
-    card: "#1e1e1e", // slightly lighter for contrast
-    text: "#eaeaea", // off-white for readability
-    secondaryText: "#b3b3b3", // for descriptions/subheadings
-    accent: "#ffd369", // warm accent color
-    button: "#121212", // dark text on light button
-    nav: "#1c1c1c", // nav bar background
-    shadow: "0px 4px 12px rgba(0, 0, 0, 0.5)", // card shadows
+    background: "#0b0e11", // deep dark background
+    card: "#161a1e", // slightly lighter for contrast
+    text: "#eaecef", // main white text
+    secondaryText: "#8b949e", // muted grey for secondary text
+    accent: "#f0b90b", // Binance gold/yellow
+    button: "#0b0e11", // dark button text for contrast
+    nav: "#0d1117", // navbar background
+    shadow: "0px 4px 12px rgba(0, 0, 0, 0.5)",
   },
   font: {
     family: "Poppins, Inter, Roboto, Arial, sans-serif",

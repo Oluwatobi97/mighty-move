@@ -12,19 +12,26 @@
   --shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+/* Dark Mode - Binance/Bybit Style */
 .dark-mode {
-  /* Dark Mode */
-  --bg-color: #121212;
-  --card-bg: #1e1e1e;
-  --text-primary: #eaeaea;
-  --text-secondary: #b3b3b3;
-  --highlight-color: #ffd369;
-  --btn-text: #121212;
-  --nav-bg: #1c1c1c;
+  /* Backgrounds */
+  --bg-color: #0b0e11; /* deep dark background */
+  --card-bg: #161a1e; /* slightly lighter for contrast */
+  --nav-bg: #0d1117; /* navbar background */
+
+  /* Text */
+  --text-primary: #eaecef; /* main white text */
+  --text-secondary: #8b949e; /* muted grey for secondary text */
+
+  /* Accent / Highlight */
+  --highlight-color: #f0b90b; /* Binance gold/yellow */
+  --btn-text: #0b0e11; /* dark button text for contrast */
+
+  /* Shadows */
   --shadow: 0px 4px 12px rgba(0, 0, 0, 0.5);
 }
 
-/* Apply Variables */
+/* Body */
 body {
   margin: 0;
   padding: 0;
@@ -65,7 +72,7 @@ button {
 }
 
 button:hover {
-  background-color: #e6bd50;
+  background-color: #d9a506; /* darker gold */
 }
 
 input, select, textarea {
@@ -78,11 +85,13 @@ input, select, textarea {
   font-size: 16px;
 }
 
+/* Navbar */
 nav {
   background-color: var(--nav-bg);
   box-shadow: var(--shadow);
 }
 
+/* Cards */
 .card {
   background-color: var(--card-bg);
   color: var(--text-primary);
@@ -95,6 +104,7 @@ nav {
   color: var(--text-secondary);
 }
 
+/* Links Hover */
 .nav-link:hover {
   color: var(--highlight-color);
 }
