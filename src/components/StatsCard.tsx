@@ -3,10 +3,10 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 
 const Card = styled(motion.div)`
-  background: #fff;
+  background: var(--card-bg);
   border-radius: 16px;
   padding: 1.5rem;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow);
   text-align: center;
   min-width: 120px;
   flex: 1;
@@ -15,13 +15,13 @@ const Card = styled(motion.div)`
 const Value = styled.div`
   font-size: 2rem;
   font-weight: 700;
-  color: #111;
+  color: var(--text-primary);
   margin-bottom: 0.5rem;
 `;
 
 const Label = styled.div`
   font-size: 0.9rem;
-  color: #666;
+  color: var(--text-secondary);
   font-weight: 500;
 `;
 

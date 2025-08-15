@@ -32,6 +32,7 @@ const Card = styled(motion.div)`
   max-width: 400px;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
+  color: var(--text-primary);
 
   &:hover {
     transform: translateY(-5px);

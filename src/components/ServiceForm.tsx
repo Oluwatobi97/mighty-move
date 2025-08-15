@@ -20,7 +20,6 @@ const paymentOptions = ["Bank Transfer", "Apple Pay", "PayPal"];
 
 const paymentIcons: Record<string, string> = {
   "Bank Transfer": "🏦",
-  "Apple Pay": "",
   PayPal: "🅿️",
 };
 
@@ -29,33 +28,34 @@ const paymentInstructions: Record<string, React.ReactNode> = {
     <div>
       <strong>Bank Transfer Details:</strong>
       <ul style={{ margin: "0.5em 0 0 1em" }}>
-        <li>Bank: Example Bank</li>
-        <li>Account Name: Mighty Moves Ltd</li>
-        <li>Account Number: 1234567890</li>
-        <li>Sort Code: 00-00-00</li>
+        <li>Bank: Santander PLC</li>
+        <li>Account Name: Santander PLC</li>
+        <li>Account Number: 19477556</li>
+        <li>Sort Code: 09-01-27</li>
       </ul>
       <div style={{ marginTop: 8 }}>
         Please use your booking reference as the payment reference.
       </div>
     </div>
   ),
-  "Apple Pay": (
-    <div>
-      <strong>Apple Pay Instructions:</strong>
-      <div style={{ margin: "0.5em 0 0 1em" }}>
-        Send payment to: <b>applepay@mighty-moves.com</b>
-        <br />
-        Or scan the QR code in your Apple Pay app.
-      </div>
-    </div>
-  ),
+  //Not needed for now
+  // "Apple Pay": (
+  //   <div>
+  //     <strong>Apple Pay Instructions:</strong>
+  //     <div style={{ margin: "0.5em 0 0 1em" }}>
+  //       Send payment to: <b>applepay@mighty-moves.com</b>
+  //       <br />
+  //       Or scan the QR code in your Apple Pay app.
+  //     </div>
+  //   </div>
+  // ),
   PayPal: (
     <div>
       <strong>PayPal Instructions:</strong>
       <div style={{ margin: "0.5em 0 0 1em" }}>
-        Pay to: <b>paypal.me/mightymoves</b>
+        Pay to: <b>Olumidy_sezy@hotmail.co.uk</b>
         <br />
-        Or send to: <b>paypal@mighty-moves.com</b>
+        Or send to: <b>oladokunabiola969@gmail.com</b>
       </div>
     </div>
   ),

@@ -25,11 +25,11 @@ export const lightTheme = {
 export const darkTheme = {
   colors: {
     background: "#0b0e11", // deep dark background
-    card: "#161a1e", // slightly lighter for contrast
-    text: "#eaecef", // main white text
-    secondaryText: "#8b949e", // muted grey for secondary text
+    card: "#f0b90b", // yellow card background for dark mode
+    text: "#000000", // black text for better contrast on yellow
+    secondaryText: "#333333", // darker grey for secondary text
     accent: "#f0b90b", // Binance gold/yellow
-    button: "#0b0e11", // dark button text for contrast
+    button: "#000000", // dark button text for contrast
     nav: "#0d1117", // navbar background
     shadow: "0px 4px 12px rgba(0, 0, 0, 0.5)",
   },
