@@ -25,10 +25,10 @@ export const lightTheme = {
 export const darkTheme = {
   colors: {
     background: "#0b0e11", // deep dark background
-    card: "#f0b90b", // yellow card background for dark mode
+    card: "#ff9900", // bright orange/yellow card background for dark mode (Binance-like)
     text: "#000000", // black text for better contrast on yellow
     secondaryText: "#333333", // darker grey for secondary text
-    accent: "#f0b90b", // Binance gold/yellow
+    accent: "#ff9900", // bright orange/yellow accent
     button: "#000000", // dark button text for contrast
     nav: "#0d1117", // navbar background
     shadow: "0px 4px 12px rgba(0, 0, 0, 0.5)",
