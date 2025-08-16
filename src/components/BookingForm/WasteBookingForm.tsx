@@ -106,7 +106,7 @@ const WasteBookingForm: React.FC = () => {
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.7, delay: 0.2 }}
       >
-        <Title>Book Waste Pickup</Title>
+        <Title>Book Waste Pickup For Me</Title>
         <ArticleText>
           Schedule a waste pickup for your home, business, or construction site.
           Select the waste type, frequency, and provide the pickup address.
