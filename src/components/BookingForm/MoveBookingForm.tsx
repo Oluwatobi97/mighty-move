@@ -123,7 +123,7 @@ const MoveBookingForm: React.FC = () => {
       onSubmit={handleSubmit}
     >
       <div>
-        <Label htmlFor="pickup">Pickup Location</Label>
+        <Label htmlFor="pickup">Pickup Location for me</Label>
         <Input
           id="pickup"
           name="pickup"
