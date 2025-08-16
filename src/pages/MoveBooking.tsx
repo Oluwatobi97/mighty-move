@@ -108,7 +108,7 @@ const MoveBooking: React.FC = () => {
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.7, delay: 0.2 }}
       >
-        <Title>Book the Move</Title>
+        <Title>Book a Move</Title>
         <ArticleText>
           Plan your move with confidence. Select your pickup and drop-off
           locations, choose the right vehicle, and set your preferred date and
