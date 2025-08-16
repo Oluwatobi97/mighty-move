@@ -5,15 +5,16 @@ const Container = styled.div`
   max-width: 800px;
   margin: 2rem auto;
   padding: 2rem;
-  background: #fffde7;
+  background: var(--card-bg);
   border-radius: 18px;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+  box-shadow: var(--shadow);
 `;
 
 const Title = styled.h2`
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 1.5rem;
+  color: var(--text-primary);
 `;
 
 const SectionTitle = styled.h3`
@@ -21,6 +22,7 @@ const SectionTitle = styled.h3`
   font-weight: 600;
   margin-top: 2rem;
   margin-bottom: 1rem;
+  color: var(--text-primary);
 `;
 
 const Terms: React.FC = () => (

@@ -8,14 +8,14 @@ const Wrapper = styled(motion.div)`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(120deg, #fff9c4 0%, #ffffff 100%);
+  background: var(--card-bg);
   padding: 2rem 1rem;
 `;
 
 const Card = styled(motion.section)`
-  background: #fff;
+  background: var(--card-bg);
   border-radius: 32px;
-  box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.13);
+  box-shadow: var(--shadow);
   padding: 2.5rem 2rem;
   max-width: 600px;
   text-align: center;
@@ -29,20 +29,20 @@ const Card = styled(motion.section)`
 const Title = styled.h1`
   font-size: 2.3rem;
   font-weight: 700;
-  color: #111;
+  color: var(--text-primary);
   margin-bottom: 1.2rem;
 `;
 
 const Subtitle = styled.p`
   font-size: 1.18rem;
-  color: #444;
+  color: var(--text-secondary);
   margin-bottom: 1.5rem;
 `;
 
 const SectionTitle = styled.h2`
   font-size: 1.4rem;
   font-weight: 600;
-  color: #222;
+  color: var(--text-primary);
   margin: 2rem 0 0.7rem 0;
 `;
 

@@ -14,9 +14,9 @@ const Container = styled(motion.div)`
 `;
 
 const MainCard = styled(motion.section)`
-  background: #fffde7;
+  background: var(--card-bg);
   border-radius: 24px;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+  box-shadow: var(--shadow);
   padding: 2.5rem 2rem;
   margin-bottom: 2rem;
   display: flex;
@@ -28,13 +28,14 @@ const SectionTitle = styled.h3`
   font-size: 1.2rem;
   font-weight: 700;
   margin-bottom: 1rem;
-  color: #111;
+  color: var(--text-primary);
 `;
 
 const Title = styled.h2`
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 1rem;
+  color: var(--text-primary);
 `;
 
 const StatsGrid = styled.div`
@@ -53,7 +54,9 @@ const Input = styled.input`
   margin: 0.5rem 0.5rem 0 0;
   padding: 0.5rem;
   border-radius: 6px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--text-secondary);
+  background: var(--card-bg);
+  color: var(--text-primary);
 `;
 
 const ControlButton = styled.button`
@@ -64,24 +67,24 @@ const ControlButton = styled.button`
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
-  background: #2d3748;
-  color: white;
+  background: var(--highlight-color);
+  color: var(--btn-text);
   transition: background-color 0.2s;
 
   &:hover {
-    background: #4a5568;
+    background: var(--highlight-color);
   }
 
   &:disabled {
-    background: #a0aec0;
+    background: var(--text-secondary);
     cursor: not-allowed;
   }
 `;
 
 const Spinner = styled.div`
   margin: 4rem auto;
-  border: 5px solid #e2e8f0;
-  border-top: 5px solid #2d3748;
+  border: 5px solid var(--card-bg);
+  border-top: 5px solid var(--text-primary);
   border-radius: 50%;
   width: 50px;
   height: 50px;
@@ -96,7 +99,7 @@ const Spinner = styled.div`
 const EmptyState = styled.div`
   text-align: center;
   padding: 3rem;
-  color: #718096;
+  color: var(--text-secondary);
   font-size: 1.1rem;
 `;
 

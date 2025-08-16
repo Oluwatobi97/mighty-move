@@ -13,9 +13,9 @@ const Container = styled(motion.div)`
 `;
 
 const Card = styled(motion.section)`
-  background: #fffde7;
+  background: var(--card-bg);
   border-radius: 24px;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+  box-shadow: var(--shadow);
   padding: 2.5rem 2rem;
   margin-bottom: 2rem;
 `;
@@ -24,22 +24,23 @@ const Title = styled.h2`
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 1rem;
+  color: var(--text-primary);
 `;
 
 const ArticleText = styled.p`
   font-size: 1.1rem;
-  color: #333;
+  color: var(--text-secondary);
   margin-bottom: 2rem;
 `;
 
 const PaymentSection = styled.div`
-  background: #fffde7;
+  background: var(--card-bg);
   border-radius: 12px;
   padding: 1rem 1.2rem;
   margin-top: 1.5rem;
   font-size: 1rem;
-  color: #444;
-  box-shadow: 0 2px 8px 0 rgba(31, 38, 135, 0.06);
+  color: var(--text-secondary);
+  box-shadow: var(--shadow);
 `;
 
 const fields = [

@@ -13,9 +13,9 @@ const Container = styled(motion.div)`
 `;
 
 const MainCard = styled(motion.section)`
-  background: #fffde7;
+  background: var(--card-bg);
   border-radius: 24px;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+  box-shadow: var(--shadow);
   padding: 2.5rem 2rem;
   margin-bottom: 2rem;
   display: flex;
@@ -38,9 +38,9 @@ const TopPanelsWrapper = styled.div`
   }
 `;
 const PanelCard = styled.div`
-  background: #fff;
+  background: var(--card-bg);
   border-radius: 18px;
-  box-shadow: 0 2px 8px 0 rgba(31, 38, 135, 0.08);
+  box-shadow: var(--shadow);
   padding: 1.5rem 1.2rem;
   max-width: 400px;
   min-width: 260px;
@@ -55,7 +55,7 @@ const SectionTitle = styled.h3`
   font-size: 1.2rem;
   font-weight: 700;
   margin-bottom: 1rem;
-  color: #111;
+  color: var(--text-primary);
 `;
 const HistoryList = styled.ul`
   list-style: none;
@@ -63,19 +63,19 @@ const HistoryList = styled.ul`
   margin: 0;
 `;
 const HistoryItem = styled.li`
-  background: #f4faff;
+  background: var(--card-bg);
   border-radius: 10px;
   margin-bottom: 1rem;
   padding: 1rem 1.2rem;
   font-weight: 500;
-  box-shadow: 0 2px 8px 0 rgba(31, 38, 135, 0.06);
+  box-shadow: var(--shadow);
   display: flex;
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
   transition: background 0.2s;
   &:hover {
-    background: #dbefff;
+    background: var(--card-bg);
   }
 `;
 const StatusBadge = styled.span<{ status: string }>`
@@ -100,25 +100,26 @@ const ProfileLink = styled(Link)`
   display: inline-block;
   margin-bottom: 1.5rem;
   font-weight: 600;
-  color: #111;
-  background: #fff9c4;
+  color: var(--text-primary);
+  background: var(--highlight-color);
   border-radius: 10px;
   padding: 0.5em 1.5em;
-  box-shadow: 0 2px 8px 0 rgba(31, 38, 135, 0.06);
+  box-shadow: var(--shadow);
   text-decoration: none;
   transition: background 0.2s;
   &:hover {
-    background: #fff176;
+    background: var(--highlight-color);
   }
 `;
 const Title = styled.h2`
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 1rem;
+  color: var(--text-primary);
 `;
 const ArticleText = styled.p`
   font-size: 1.1rem;
-  color: #333;
+  color: var(--text-secondary);
   margin-bottom: 2rem;
 `;
 const BookingsList = styled.div`
@@ -133,8 +134,8 @@ const BookingsList = styled.div`
 `;
 const Spinner = styled.div`
   margin: 2rem auto;
-  border: 4px solid #eee;
-  border-top: 4px solid #111;
+  border: 4px solid var(--card-bg);
+  border-top: 4px solid var(--text-primary);
   border-radius: 50%;
   width: 36px;
   height: 36px;
