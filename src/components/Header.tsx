@@ -185,7 +185,7 @@ const Header: React.FC = () => {
 
   // Navigation links for authenticated users
   const navLinks = [
-    { to: "/home", label: "My Home" },
+    { to: "/home", label: "Home" },
     // { to: "/move", label: "Book a Move" },
     // { to: "/waste", label: "Waste Pickup" },
     // { to: "/logistics", label: "Send Package" },
