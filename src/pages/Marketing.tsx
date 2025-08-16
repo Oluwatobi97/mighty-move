@@ -9,14 +9,14 @@ const Wrapper = styled(motion.div)`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(120deg, #fff9c4 0%, #ffffff 100%);
+  background: var(--card-bg);
   padding: 2rem 1rem;
 `;
 
 const Hero = styled(motion.section)`
-  background: #fff;
+  background: var(--card-bg);
   border-radius: 32px;
-  box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.13);
+  box-shadow: var(--shadow);
   padding: 3rem 2.5rem;
   max-width: 540px;
   text-align: center;
@@ -30,13 +30,13 @@ const Hero = styled(motion.section)`
 const Title = styled.h1`
   font-size: 2.7rem;
   font-weight: 700;
-  color: #111;
+  color: var(--text-primary);
   margin-bottom: 1.2rem;
 `;
 
 const Subtitle = styled.p`
   font-size: 1.25rem;
-  color: #444;
+  color: var(--text-secondary);
   margin-bottom: 2rem;
 `;
 
@@ -48,18 +48,18 @@ const CTAGroup = styled.div`
 `;
 
 const CTAButton = styled(Link)`
-  background: #fff9c4;
-  color: #111111;
+  background: var(--highlight-color);
+  color: var(--btn-text);
   font-weight: 600;
   font-size: 1.1rem;
   border-radius: 18px;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+  box-shadow: var(--shadow);
   padding: 1.1em 2.2em;
   transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
   &:hover {
-    background: #fff176;
+    background: var(--highlight-color);
     transform: translateY(-6px) scale(1.06);
-    box-shadow: 0 16px 40px 0 rgba(31, 38, 135, 0.18);
+    box-shadow: var(--shadow);
   }
 `;
 

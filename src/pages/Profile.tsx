@@ -9,15 +9,16 @@ const Container = styled(motion.div)`
   max-width: 600px;
   margin: 2rem auto;
   padding: 2rem;
-  background: #fffde7;
+  background: var(--card-bg);
   border-radius: 18px;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+  box-shadow: var(--shadow);
 `;
 
 const Title = styled.h2`
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 1.5rem;
+  color: var(--text-primary);
 `;
 
 const Section = styled.div`
@@ -27,19 +28,22 @@ const Section = styled.div`
 const Label = styled.label`
   font-weight: 600;
   margin-right: 1rem;
+  color: var(--text-primary);
 `;
 
 const Input = styled.input`
   padding: 0.6em 1em;
   border-radius: 10px;
-  border: 1px solid #eee;
+  border: 1px solid var(--text-secondary);
   font-size: 1rem;
   margin-bottom: 0.5rem;
+  background: var(--card-bg);
+  color: var(--text-primary);
 `;
 
 const Button = styled.button`
-  background: #111;
-  color: #fff;
+  background: var(--highlight-color);
+  color: var(--btn-text);
   border: none;
   border-radius: 10px;
   padding: 0.7em 2em;
@@ -54,9 +58,9 @@ const BookingHistory = styled.ul`
 `;
 
 const BookingItem = styled.li`
-  background: #fff;
+  background: var(--card-bg);
   border-radius: 10px;
-  box-shadow: 0 2px 8px 0 rgba(31, 38, 135, 0.06);
+  box-shadow: var(--shadow);
   margin-bottom: 1rem;
   padding: 1rem;
 `;
